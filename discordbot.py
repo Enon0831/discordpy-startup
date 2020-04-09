@@ -4,7 +4,7 @@ import pickle
 import member
 
 client = discord.Client()
-#token = os.environ['DISCORD_BOT_TOKEN']
+token = os.environ['DISCORD_BOT_TOKEN']
 
 guild = {}
 
