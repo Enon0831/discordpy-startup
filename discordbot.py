@@ -4,19 +4,22 @@ import pickle
 import member
 
 client = discord.Client()
-token = os.environ['DISCORD_BOT_TOKEN']
+#token = os.environ['DISCORD_BOT_TOKEN']
 
 guild = {}
 
 f_name = "/tmp/guild.pickle"
 
 #プログラム再起動時のインスタンス読み込み
-f = open(f_name,'rb')
 try:
+    f = open(f_name,'rb')
     guild = pickle.load(f)
+    f.close
 except EOFError:
     pass
-f.close
+except FileNotFoundError:
+    pass
+
 
 @client.event
 async def on_ready():
