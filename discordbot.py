@@ -8,7 +8,7 @@ client = discord.Client()
 
 guild = {}
 
-f_name = "/tmp/guild.pickle"
+f_name = "./tmp/guild.pickle"
 
 #プログラム再起動時のインスタンス読み込み
 try:
