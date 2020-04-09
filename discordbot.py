@@ -1,10 +1,10 @@
 import discord
+import os
 import pickle
 import member
 
 client = discord.Client()
-
-
+token = os.environ['DISCORD_BOT_TOKEN']
 
 guild = {}
 
@@ -191,4 +191,4 @@ async def on_message(message):
                 f.close
         
 
-client.run("Njk0NzYyMDExMDMyMTU4Mjkw.XoqAfw.61nju282F-2vVPixGAbFqwyfFxQ")
+client.run(token)
