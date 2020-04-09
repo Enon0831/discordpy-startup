@@ -8,8 +8,10 @@ token = os.environ['DISCORD_BOT_TOKEN']
 
 guild = {}
 
+f_name = "/tmp/guild.pickle"
+
 #プログラム再起動時のインスタンス読み込み
-f = open('guild.pickle','rb')
+f = open(f_name,'rb')
 try:
     guild = pickle.load(f)
 except EOFError:
@@ -35,13 +37,10 @@ async def on_message(message):
 
     # 送り主がBotだった場合反応したくないので
     if client.user != message.author:
-        #インスタンス保存準備
-        f = open('guild.pickle','wb')
-
         #サーバー登録情報が無ければ自動登録
         if not message.author.guild.id in guild:
             guild[message.author.guild.id] = member.guild()
-            pickle.dump(guild,f)
+            
 
         # !help でヘルプ表示
         if message.content.startswith("!help"):
@@ -83,7 +82,7 @@ async def on_message(message):
                         await message.guild.create_role(name=str(i),mentionable = True)
                     m = member.nowhands(guild[message.author.guild.id])
                     await message.channel.send(m)
-                    pickle.dump(guild,f)
+                    
 
                 # 「!c」で始まるか調べる
                 elif message.content.startswith("!c"):
@@ -179,16 +178,20 @@ async def on_message(message):
                 #現在挙手状況の確認
                 if message.content.startswith("!now"):
                     await message.channel.send(member.nowhands(guild[message.author.guild.id]))
-                    pickle.dump(guild,f)
+                    
                 
                 # 挙手状態が変更されるとき
                 if kyosyu == 1:
                     # メッセージ内容の変更
                     await message.channel.send(member.nowhands(guild[message.author.guild.id]))
-                    pickle.dump(guild,f)
-                
-                #インスタンス保存
-                f.close
+                    
+
+                    
+        #インスタンス保存準備
+        f = open(f_name,'wb')     
+        pickle.dump(guild,f)
+        #インスタンス保存
+        f.close
         
 
 client.run(token)
