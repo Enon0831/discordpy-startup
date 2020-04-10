@@ -5,7 +5,6 @@ import member
 
 client = discord.Client()
 token = os.environ['DISCORD_BOT_TOKEN']
-
 guild = {}
 
 f_name = "./tmp/guild.pickle"
@@ -57,12 +56,15 @@ async def on_message(message):
                 
                 #交流戦時間の追加
                 if message.content.startswith("!set"):
+                    m = ""
                     for i in mes:
-                        if not i == "!set": 
+                        if  str.isdecimal(i): 
                             guild[message.author.guild.id].set(str(i))
                             if discord.utils.get(message.guild.roles, name=str(i)) == None:
                                 await message.guild.create_role(name=str(i),mentionable = True)
-                    m = "```\n指定した交流戦の時間を追加登録しました\n```"
+                            m = "```\n指定した交流戦の時間を追加登録しました\n```"
+                    if m == "":
+                        m = "```\n追加したい交流戦の時間を数値で入力してください\n```"
                     await message.channel.send(m)
 
                 #交流戦時間の削除
@@ -72,7 +74,9 @@ async def on_message(message):
                             guild[message.author.guild.id].out(str(i))
                             role = discord.utils.get(message.guild.roles, name=str(i))
                             await role.delete()
-                    m = "```\n指定した交流戦の時間を削除しました\n```"
+                            m = "```\n指定した交流戦の時間を削除しました\n```"
+                    if m == "":
+                        m = "```\n該当する交流戦の時間がありませんでした\n```"
                     await message.channel.send(m)
 
                 # !clear で始まる場合は挙手リセット
@@ -96,9 +100,10 @@ async def on_message(message):
                         await message.channel.send(m)
                         for i in mes:
                             if i in guild[message.author.guild.id].time:
-                                guild[message.author.guild.id].time[i].add(player.name)
-                                role = discord.utils.get(message.guild.roles, name=str(i))
-                                await player.add_roles(role)
+                                if not player.name in guild[message.author.guild.id].time[i].name:
+                                    guild[message.author.guild.id].time[i].add(player.name)
+                                    role = discord.utils.get(message.guild.roles, name=str(i))
+                                    await player.add_roles(role)
 
                     #自分の追加
                     else:
@@ -106,9 +111,10 @@ async def on_message(message):
                         await message.channel.send(m)
                         for i in mes:
                             if i in guild[message.author.guild.id].time:
-                                guild[message.author.guild.id].time[i].add(message.author.name)
-                                role = discord.utils.get(message.guild.roles, name=str(i))
-                                await message.author.add_roles(role)
+                                if not message.author.name in guild[message.author.guild.id].time[i].name:
+                                    guild[message.author.guild.id].time[i].add(message.author.name)
+                                    role = discord.utils.get(message.guild.roles, name=str(i))
+                                    await message.author.add_roles(role)
 
                     
                 # !rc で始まる場合は挙手
@@ -120,9 +126,10 @@ async def on_message(message):
                         await message.channel.send(m)
                         for i in mes:
                             if i in guild[message.author.guild.id].time:
-                                guild[message.author.guild.id].time[i].reserve(player.name)
-                                role = discord.utils.get(message.guild.roles, name=str(i))
-                                await player.add_roles(role)
+                                if not "仮" + player.name in guild[message.author.guild.id].time[i].res:
+                                    guild[message.author.guild.id].time[i].reserve(player.name)
+                                    role = discord.utils.get(message.guild.roles, name=str(i))
+                                    await player.add_roles(role)
 
                     #自分の追加
                     else:
@@ -130,9 +137,10 @@ async def on_message(message):
                         await message.channel.send(m)
                         for i in mes:
                             if i in guild[message.author.guild.id].time:
-                                guild[message.author.guild.id].time[i].reserve(message.author.name)
-                                role = discord.utils.get(message.guild.roles, name=str(i))
-                                await player.add_roles(role)
+                                if not "仮" + message.author.name in guild[message.author.guild.id].time[i].res:
+                                    guild[message.author.guild.id].time[i].reserve(message.author.name)
+                                    role = discord.utils.get(message.guild.roles, name=str(i))
+                                    await message.author.add_roles(role)
 
                 # !d で始まる場合は取り下げ
                 if message.content.startswith("!d"):
@@ -164,7 +172,7 @@ async def on_message(message):
                         await message.channel.send(m)
                         for i in mes:
                             if i in guild[message.author.guild.id].time:
-                                guild[message.author.guild.id].time[i].reservedel(player)
+                                guild[message.author.guild.id].time[i].reservedel(player.name)
                                 role = discord.utils.get(message.guild.roles, name=str(i))
                                 await player.remove_roles(role)
 
@@ -176,7 +184,7 @@ async def on_message(message):
                             if i in guild[message.author.guild.id].time:
                                 guild[message.author.guild.id].time[i].reservedel(message.author.name)
                                 role = discord.utils.get(message.guild.roles, name=str(i))
-                                await player.remove_roles(role)
+                                await message.author.remove_roles(role)
 
                 #現在挙手状況の確認
                 if message.content.startswith("!now"):
