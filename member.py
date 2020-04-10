@@ -43,6 +43,7 @@ class menber:
 class guild:
     def __init__(self):
         self.mention = 0
+        self.mentiondef = 0
         self.time = {}
         self.time_key = []
     
@@ -60,12 +61,12 @@ class guild:
         self.time[time] = menber(send,6)
     
     def mentionset(self):
-        if self.mention == 1:
-            self.mention = 0
+        if self.mentiondef == 1:
+            self.mentiondef = 0
             m = "```mention設定をOFFにしました```"
             return m
         else:
-            self.mention = 1
+            self.mentiondef = 1
             m = "```mention設定をONにしました```"
             return m
 
@@ -75,8 +76,9 @@ def nowhands(server):
             + "交流戦の時間が登録されていません\n" \
             + "```"
     else:
-        if server.mention == 1:
+        if (server.mentiondef == 1) or (server.mention == 1):
             mall = "@everyone\n"
+            server.mention = 0
         else:
             mall = "\n"
         mwar = "**WAR LIST**\n"
@@ -125,7 +127,8 @@ def help():
         + "      !rd @non 21 -> 21時のnonの仮挙手を取り下げる\n" \
         + "\n" \
 \
-    + "!now -> 現在の挙手状況の確認\n" \
+    + "!now  -> 現在の挙手状況の確認\n" \
+    + "!mnow -> 現在の挙手状況の確認(everyoneメンション付)\n" \
         + "\n" \
 \
     + "!clear -> 挙手リセット\n" \
