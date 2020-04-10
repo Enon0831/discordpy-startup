@@ -5,6 +5,7 @@ import member
 
 client = discord.Client()
 token = os.environ['DISCORD_BOT_TOKEN']
+
 guild = {}
 
 f_name = "./tmp/guild.pickle"
@@ -99,11 +100,16 @@ async def on_message(message):
                         m = player.name + "さんの挙手を追加します"
                         await message.channel.send(m)
                         for i in mes:
+                            #指定した時間が登録されているか
                             if i in guild[message.author.guild.id].time:
+                                #指定した時間にすでに挙手をしているか
                                 if not player.name in guild[message.author.guild.id].time[i].name:
+                                    #仮挙手をしていた場合仮挙手を削除
                                     if "仮" + player.name in guild[message.author.guild.id].time[i].res:
                                         guild[message.author.guild.id].time[i].reservedel(player.name)
                                     guild[message.author.guild.id].time[i].add(player.name)
+                                    if len(guild[message.author.guild.id].time[i].name) >= 3:
+                                        guild[message.author.guild.id].mention = 1
                                     role = discord.utils.get(message.guild.roles, name=str(i))
                                     await player.add_roles(role)
 
@@ -117,6 +123,8 @@ async def on_message(message):
                                     if "仮" + message.author.name in guild[message.author.guild.id].time[i].res:
                                         guild[message.author.guild.id].time[i].reservedel(message.author.name)
                                     guild[message.author.guild.id].time[i].add(message.author.name)
+                                    if len(guild[message.author.guild.id].time[i].name) >= 3:
+                                        guild[message.author.guild.id].mention = 1
                                     role = discord.utils.get(message.guild.roles, name=str(i))
                                     await message.author.add_roles(role)
 
@@ -196,6 +204,10 @@ async def on_message(message):
 
                 #現在挙手状況の確認
                 if message.content.startswith("!now"):
+                    await message.channel.send(member.nowhands(guild[message.author.guild.id]))
+                
+                if message.content.startswith("!mnow"):
+                    guild[message.author.guild.id].mention = 1
                     await message.channel.send(member.nowhands(guild[message.author.guild.id]))
                     
                 
