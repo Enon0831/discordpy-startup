@@ -9,17 +9,15 @@ class menber:
     def add(self,name):
         if(self.n[1] > 0):
             self.n[1] -= 1
-            if self.tmp == 1:
-                self.n[3] -= 1
             self.name.append(name)
     
     def reserve(self,name):
         if len(self.res) == 0:
             self.tmp = 1
             self.res.append("仮" + name)
-            self.resn[1] += 1
             for i in range(3):
                 self.n.insert(2+i,self.resn[i])
+            self.n[3] += 1
         else:
             self.res.append("仮" + name)
             self.n[3] += 1
