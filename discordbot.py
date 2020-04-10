@@ -19,6 +19,7 @@ except EOFError:
 except FileNotFoundError:
     pass
 
+
 @client.event
 async def on_ready():
     print('Logged in as')
@@ -100,6 +101,8 @@ async def on_message(message):
                         for i in mes:
                             if i in guild[message.author.guild.id].time:
                                 if not player.name in guild[message.author.guild.id].time[i].name:
+                                    if "仮" + player.name in guild[message.author.guild.id].time[i].res:
+                                        guild[message.author.guild.id].time[i].reservedel(player.name)
                                     guild[message.author.guild.id].time[i].add(player.name)
                                     role = discord.utils.get(message.guild.roles, name=str(i))
                                     await player.add_roles(role)
@@ -111,6 +114,8 @@ async def on_message(message):
                         for i in mes:
                             if i in guild[message.author.guild.id].time:
                                 if not message.author.name in guild[message.author.guild.id].time[i].name:
+                                    if "仮" + message.author.name in guild[message.author.guild.id].time[i].res:
+                                        guild[message.author.guild.id].time[i].reservedel(message.author.name)
                                     guild[message.author.guild.id].time[i].add(message.author.name)
                                     role = discord.utils.get(message.guild.roles, name=str(i))
                                     await message.author.add_roles(role)
@@ -126,6 +131,8 @@ async def on_message(message):
                         for i in mes:
                             if i in guild[message.author.guild.id].time:
                                 if not "仮" + player.name in guild[message.author.guild.id].time[i].res:
+                                    if player.name in guild[message.author.guild.id].time[i].name:
+                                        guild[message.author.guild.id].time[i].sub(player.name)
                                     guild[message.author.guild.id].time[i].reserve(player.name)
                                     role = discord.utils.get(message.guild.roles, name=str(i))
                                     await player.add_roles(role)
@@ -137,6 +144,8 @@ async def on_message(message):
                         for i in mes:
                             if i in guild[message.author.guild.id].time:
                                 if not "仮" + message.author.name in guild[message.author.guild.id].time[i].res:
+                                    if message.author.name in guild[message.author.guild.id].time[i].name:
+                                        guild[message.author.guild.id].time[i].sub(message.author.name)
                                     guild[message.author.guild.id].time[i].reserve(message.author.name)
                                     role = discord.utils.get(message.guild.roles, name=str(i))
                                     await message.author.add_roles(role)
