@@ -17,26 +17,26 @@ class menber:
         if len(self.res) == 0:
             self.tmp = 1
             self.res.append("仮" + name)
-            self.resn[1] = self.n[1] - len(self.res)
+            self.resn[1] += 1
             for i in range(3):
                 self.n.insert(2+i,self.resn[i])
         else:
             self.res.append("仮" + name)
-            self.n[3] -= 1
+            self.n[3] += 1
 
     def sub(self,name):
         for i in range(len(self.name)):
             if self.name[i] == name:
                 self.name.pop(i)
                 self.n[1] += 1
-                if self.tmp == 1:
-                    self.n[3] += 1
+                break
 
     def reservedel(self,name):
         for i in range(len(self.res)):
             if self.res[i] == "仮" + name:
                 self.res.pop(i)
-                self.n[3] += 1
+                self.n[3] -= 1
+                break
         if len(self.res) == 0:
             self.tmp = 0
             for i in range(3):
