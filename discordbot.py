@@ -78,7 +78,7 @@ def read_csv(data):
 
 #s3にcsvのアップロード
 def upload(id):
-    cfile = "./" + str(id) + ".csv"
+    cfile = "./tmp/" + str(id) + ".csv"
     s3.upload_file(cfile,bucket_name,cfile[2:])
 
 #ボットにcsvの情報を読み込ませる
