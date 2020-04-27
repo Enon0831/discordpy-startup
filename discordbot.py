@@ -103,8 +103,6 @@ async def on_message(message):
             download(message.author.guild.id)
     except:
         pass
-    except:
-        pass
     if bot.user != message.author:
         #サーバー登録情報が無ければ自動登録
         if not message.author.guild.id in guild:
