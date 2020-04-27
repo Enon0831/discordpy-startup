@@ -30,7 +30,7 @@ def get_s3file(bucket_name, key):
 
 #csv作成
 def create_csv(id,server):
-    with open("./" + str(id) + ".csv","w",newline="") as f:
+    with open("./tmp/" + str(id) + ".csv","w",newline="") as f:
         writer = csv.writer(f)
         writer.writerow([id])
         for i in guild[id].time_key:
