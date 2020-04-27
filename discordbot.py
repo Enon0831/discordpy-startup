@@ -99,7 +99,10 @@ async def on_ready():
 @bot.event
 async def on_message(message):
     try:
-        download(message.author.guild.id)
+        if not message.author.guild.id in guild:
+            download(message.author.guild.id)
+    except:
+        pass
     except:
         pass
     if bot.user != message.author:
@@ -140,6 +143,7 @@ async def set(ctx,*args):
         m = "```\n追加したい交流戦の時間を数値で入力してください\n```"
     await ctx.send(m)
     create_csv(ctx.author.guild.id,guild[ctx.author.guild.id])
+    upload(ctx.author.guild.id)
 # -------------------------------------------------------------------------------------------------------------
 
 ### 交流戦時間削除
@@ -155,6 +159,8 @@ async def out(ctx,*args):
     if m == "":
         m = "```\n該当する交流戦の時間がありませんでした\n```"
     await ctx.send(m)
+    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id])
+    upload(ctx.author.guild.id)
 # -------------------------------------------------------------------------------------------------------------
 
 ### 挙手リセット
@@ -169,6 +175,7 @@ async def clear(ctx):
     m = member.nowhands(guild[ctx.author.guild.id])
     await ctx.send(m)
     create_csv(ctx.author.guild.id,guild[ctx.author.guild.id])
+    upload(ctx.author.guild.id)
 # -------------------------------------------------------------------------------------------------------------
 
 ### 現在挙手状況表示
