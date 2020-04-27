@@ -30,7 +30,7 @@ def get_s3file(bucket_name, key):
 
 #csv作成
 def create_csv(id,server):
-    with open("./tmp/" + str(id) + ".csv","w",newline="") as f:
+    with open("/tmp/" + str(id) + ".csv","w",newline="") as f:
         writer = csv.writer(f)
         writer.writerow([id])
         for i in guild[id].time_key:
@@ -78,8 +78,8 @@ def read_csv(data):
 
 #s3にcsvのアップロード
 def upload(id):
-    cfile = "./tmp/" + str(id) + ".csv"
-    s3.upload_file(cfile,bucket_name,cfile[6:])
+    cfile = "/tmp/" + str(id) + ".csv"
+    s3.upload_file(cfile,bucket_name,cfile[5:])
 
 #ボットにcsvの情報を読み込ませる
 def download(id):
