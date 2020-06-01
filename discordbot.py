@@ -354,7 +354,7 @@ async def rd(ctx,*args):
     upload(ctx.author.guild.id)
 # -------------------------------------------------------------------------------------------------------------
 
-### mention人数設定 
+### mention人数設定
 @bot.command()
 async def ch(ctx,*args):
     for i in args:
