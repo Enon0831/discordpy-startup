@@ -360,7 +360,7 @@ async def ch(ctx,*args):
     for i in args:
         if  str.isdecimal(i):
             if int(i) > 5:
-                m = "```\5以下で設定してください\n```"
+                m = "```5以下で設定してください\n```"
             else:
                 guild[ctx.author.guild.id].mentionnum = int(i)
                 m = "```\nmentionを送る人数を@" + str(i) + "人に変更しました\n```"
