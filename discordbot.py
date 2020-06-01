@@ -29,10 +29,10 @@ def get_s3file(bucket_name, key):
     return io.TextIOWrapper(io.BytesIO(s3obj['Body'].read()))
 
 #csv作成
-def create_csv(id,server):
+def create_csv(id,server,name):
     with open("/tmp/" + str(id) + ".csv","w",newline="") as f:
         writer = csv.writer(f)
-        writer.writerow([id])
+        writer.writerow([id,str(guild[id].mentionnum),name])
         for i in guild[id].time_key:
             if (len(guild[id].time[i].name) == 0) and (guild[id].time[i].tmp == 0):
                 textout = [i] + [guild[id].time[i].tmp] + [str(x) for x in guild[id].time[i].n]
@@ -48,6 +48,8 @@ def read_csv(data):
     global guild
     id = int(data[0][0])
     guild[id] = member.guild()
+    if len(data[0]) > 1:
+        guild[id].mentionnum = int(data[0][1])
     data.pop(0)
     #time_key作成
     for i in range(len(data)):
@@ -140,7 +142,7 @@ async def set(ctx,*args):
     if m == "":
         m = "```\n追加したい交流戦の時間を数値で入力してください\n```"
     await ctx.send(m)
-    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id])
+    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name)
     upload(ctx.author.guild.id)
 # -------------------------------------------------------------------------------------------------------------
 
@@ -157,7 +159,7 @@ async def out(ctx,*args):
     if m == "":
         m = "```\n該当する交流戦の時間がありませんでした\n```"
     await ctx.send(m)
-    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id])
+    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name)
     upload(ctx.author.guild.id)
 # -------------------------------------------------------------------------------------------------------------
 
@@ -172,7 +174,7 @@ async def clear(ctx):
         await ctx.guild.create_role(name=str(i),mentionable = True)
     m = member.nowhands(guild[ctx.author.guild.id])
     await ctx.send(m)
-    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id])
+    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name)
     upload(ctx.author.guild.id)
 # -------------------------------------------------------------------------------------------------------------
 
@@ -211,7 +213,7 @@ async def c(ctx,*args):
                         guild[ctx.author.guild.id].time[i].reservedel(player.name)
                     guild[ctx.author.guild.id].time[i].add(player.name)
                     # 挙手した時間が@3以下だったらメンション付きにする
-                    if len(guild[ctx.author.guild.id].time[i].name) >= 3:
+                    if 6 - len(guild[ctx.author.guild.id].time[i].name) >= guild[ctx.author.guild.id].mentionnum:
                         guild[ctx.author.guild.id].mention = 1
                     role = discord.utils.get(ctx.guild.roles, name=str(i))
                     await player.add_roles(role)
@@ -229,13 +231,13 @@ async def c(ctx,*args):
                         guild[ctx.author.guild.id].time[i].reservedel(ctx.author.name)
                     guild[ctx.author.guild.id].time[i].add(ctx.author.name)
                     # 挙手した時間が@3以下だったらメンション付きにする
-                    if len(guild[ctx.author.guild.id].time[i].name) >= 3:
+                    if 6 - len(guild[ctx.author.guild.id].time[i].name) >= guild[ctx.author.guild.id].mentionnum:
                         guild[ctx.author.guild.id].mention = 1
                     role = discord.utils.get(ctx.guild.roles, name=str(i))
                     await ctx.author.add_roles(role)
     # 変更後の挙手状態を表示
     await ctx.send(member.nowhands(guild[ctx.author.guild.id]))
-    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id])
+    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name)
     upload(ctx.author.guild.id)
     # -------------------------------------------------------------------------------------------------------------
 
@@ -279,7 +281,7 @@ async def rc(ctx,*args):
                     await ctx.author.add_roles(role)
     # 変更後の挙手状態を表示
     await ctx.send(member.nowhands(guild[ctx.author.guild.id]))
-    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id])
+    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name)
     upload(ctx.author.guild.id)
 # -------------------------------------------------------------------------------------------------------------
 
@@ -314,7 +316,7 @@ async def d(ctx,*args):
                 await ctx.author.remove_roles(role)
     # 変更後の挙手状態を表示
     await ctx.send(member.nowhands(guild[ctx.author.guild.id]))
-    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id])
+    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name)
     upload(ctx.author.guild.id)
 # -------------------------------------------------------------------------------------------------------------
 
@@ -348,23 +350,23 @@ async def rd(ctx,*args):
                 await ctx.author.remove_roles(role)
     # 変更後の挙手状態を表示
     await ctx.send(member.nowhands(guild[ctx.author.guild.id]))
-    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id])
+    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name)
     upload(ctx.author.guild.id)
 # -------------------------------------------------------------------------------------------------------------
 
-### 交流戦呼びかけ
+### mention人数設定
 @bot.command()
-async def vs(ctx,*args):
-    # args = [時間,対戦相手,フレンドコード,開設時間]
-    if (len(args) != 4) or (len(args[2]) != 14) or (str.isdecimal(args[0]) == False):
-        return
-    time = args[0]
-    role = discord.utils.get(ctx.guild.roles, name=str(time))
-    vsclan = args[1]
-    fc = args[2]
-    op = args[3]
-
-    await ctx.send(member.vs(role.mention,vsclan,fc,op))
+async def ch(ctx,*args):
+    for i in args:
+        if  str.isdecimal(i):
+            if int(i) > 5:
+                m = "```\5以下で設定してください\n```"
+            else:
+                guild[ctx.author.guild.id].mentionnum = int(i)
+                m = "```\nmentionを送る人数を@" + str(i) + "人に変更しました\n```"
+        else:
+            m = "```\n数値で入力してください\n```"
+    await ctx.channel.send(m)
 # -------------------------------------------------------------------------------------------------------------
 
 bot.run(token)
