@@ -44,6 +44,7 @@ class guild:
     def __init__(self):
         self.mention = 0
         self.mentiondef = 0
+        self.mentionnum = 3
         self.time = {}
         self.time_key = []
     
@@ -132,6 +133,11 @@ def help():
         + "\n" \
 \
     + "!clear -> 挙手リセット\n" \
+        + "\n" \
+\
+    + "!ch -> mention人数の設定\n" \
+        + "   例:!ch 4   -> @4人になる時間に挙手したらメンションが付く\n" \
+        + "   デフォルトは@3人\n" \
     + "```"
 
     return m
