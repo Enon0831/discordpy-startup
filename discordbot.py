@@ -213,7 +213,7 @@ async def c(ctx,*args):
                         guild[ctx.author.guild.id].time[i].reservedel(player.name)
                     guild[ctx.author.guild.id].time[i].add(player.name)
                     # 挙手した時間が@3以下だったらメンション付きにする
-                    if 6 - len(guild[ctx.author.guild.id].time[i].name) >= guild[ctx.author.guild.id].mentionnum:
+                    if 6 - len(guild[ctx.author.guild.id].time[i].name) <= guild[ctx.author.guild.id].mentionnum:
                         guild[ctx.author.guild.id].mention = 1
                     role = discord.utils.get(ctx.guild.roles, name=str(i))
                     await player.add_roles(role)
@@ -231,7 +231,7 @@ async def c(ctx,*args):
                         guild[ctx.author.guild.id].time[i].reservedel(ctx.author.name)
                     guild[ctx.author.guild.id].time[i].add(ctx.author.name)
                     # 挙手した時間が@3以下だったらメンション付きにする
-                    if 6 - len(guild[ctx.author.guild.id].time[i].name) >= guild[ctx.author.guild.id].mentionnum:
+                    if 6 - len(guild[ctx.author.guild.id].time[i].name) <= guild[ctx.author.guild.id].mentionnum:
                         guild[ctx.author.guild.id].mention = 1
                     role = discord.utils.get(ctx.guild.roles, name=str(i))
                     await ctx.author.add_roles(role)
