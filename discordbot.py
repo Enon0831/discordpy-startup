@@ -133,7 +133,7 @@ async def set(ctx,*args):
     m = ""
     for i in args:
         #　登録するキーワードが10進で入力されているかどうか
-        if  str.isdecimal(i): 
+        if  str.isdecimal(i[:2]): 
             guild[ctx.author.guild.id].set(str(i))
             # サーバーに時間の役職がすでにあるかどうか
             if discord.utils.get(ctx.guild.roles, name=str(i)) == None:
