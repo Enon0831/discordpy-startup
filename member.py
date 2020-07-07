@@ -1,3 +1,5 @@
+import discord
+
 class menber:
     def __init__(self,text,num): # 初期化： インスタンス作成時に自動的に呼ばれる
         self.n = [text,num]
@@ -61,83 +63,48 @@ class guild:
         send = time + "@"
         self.time[time] = menber(send,6)
     
-    def mentionset(self):
-        if self.mentiondef == 1:
-            self.mentiondef = 0
-            m = "```mention設定をOFFにしました```"
-            return m
-        else:
-            self.mentiondef = 1
-            m = "```mention設定をONにしました```"
-            return m
 
 def nowhands(server):
     if len(server.time_key) == 0:
+        embed=None
         m = "```\n" \
             + "交流戦の時間が登録されていません\n" \
             + "```"
+        return m , embed
     else:
-        if (server.mentiondef == 1) or (server.mention == 1):
+        if (server.mention == 1):
             mall = "@everyone\n"
             server.mention = 0
         else:
             mall = "\n"
-        mwar = "**WAR LIST**\n"
-        mtmp = ""
+        embed=discord.Embed(title="__***WAR LIST***__",color=0xee1111)
+        #mwar = "**WAR LIST**\n"
+
+        #mtmp = ""
         for i in server.time_key:
             if server.time[i].tmp == 1:
-                mtmp = mtmp + "".join(str(x) for x in server.time[i].n) + " " + ",".join(str(x) for x in server.time[i].name) + " " + ",".join(str(x) for x in server.time[i].res) + "\n"
+                mtmp = " , ".join(str(x) for x in server.time[i].name) + " " + " , ".join(str(x) for x in server.time[i].res)
+                if mtmp == "":
+                    mtmp = "なし"
+                embed.add_field(name="".join(str(x) for x in server.time[i].n), value=mtmp, inline=False)
             else:
-                mtmp = mtmp + "".join(str(x) for x in server.time[i].n) + " " + ",".join(str(x) for x in server.time[i].name) + "\n"
-        m = mall + mwar + "```" + mtmp + "```"
-    return m
+                mtmp = " , ".join(str(x) for x in server.time[i].name)
+                if mtmp == "":
+                    mtmp = "なし"
+                embed.add_field(name="".join(str(x) for x in server.time[i].n), value=mtmp, inline=False)
+        m = mall# + mwar + "```" + mtmp + "```"
+    return m , embed
 
 def help():
-    m = "```\n" \
-    + "コマンド一覧\n" \
-\
-    + "!mention -> mentionの設定\n" \
-        + "   挙手リストを表示するときの@everyoneの有無を設定します\n" \
-        + "\n" \
-\
-    + "!set -> 交流戦時間の追加\n" \
-        + "   例:!set 21 22 23 -> 21~23時の交流戦時間を追加する\n" \
-        + "\n" \
-\
-    + "!out -> 交流戦時間の削除\n" \
-        + "   例:!out 21 22 23 -> 21~23時の交流戦時間を削除する\n" \
-        + "\n" \
-\
-    + "!c -> 挙手\n" \
-        + "   例:!c 21      -> 21時に自分が追加される\n" \
-        + "      !c @non 21 -> 21時にnonが追加される\n" \
-        + "\n" \
-\
-    +"!rc -> 仮挙手\n" \
-        + "   例:!rc 21      -> 21時に自分が仮で追加される\n" \
-        + "      !rc @non 21 -> 21時にnonが仮で追加される\n" \
-        + "\n" \
-\
-    + "!d -> 挙手取り下げ\n" \
-        + "   例:!d 21      -> 21時の自分の挙手を取り下げる\n" \
-        + "      !d @non 21 -> 21時のnonの挙手を取り下げる\n" \
-        + "\n" \
-\
-    + "!rd -> 仮挙手取り下げ\n" \
-        + "   例:!rd 21      -> 21時の自分の仮挙手を取り下げる\n" \
-        + "      !rd @non 21 -> 21時のnonの仮挙手を取り下げる\n" \
-        + "\n" \
-\
-    + "!now  -> 現在の挙手状況の確認\n" \
-    + "!mnow -> 現在の挙手状況の確認(everyoneメンション付)\n" \
-        + "\n" \
-\
-    + "!clear -> 挙手リセット\n" \
-        + "\n" \
-\
-    + "!ch -> mention人数の設定\n" \
-        + "   例:!ch 4   -> @4人になる時間に挙手したらメンションが付く\n" \
-        + "   デフォルトは@3人\n" \
-    + "```"
-
-    return m
+    embed=discord.Embed(title="__***Command List***__",color=0xee1111)
+    embed.add_field(name="!set -> 交流戦時間の追加", value="例:!set 21 22 23 -> 21~23時の交流戦時間を追加する", inline=False)
+    embed.add_field(name="!out -> 交流戦時間の削除", value="例:!out 21 22 23 -> 21~23時の交流戦時間を削除する", inline=False)
+    embed.add_field(name="!c -> 挙手", value="!c 21      -> 21時に自分が追加される\n\t!c @non 21 -> 21時にnonが追加される", inline=False)
+    embed.add_field(name="!rc -> 仮挙手", value="!rc 21      -> 21時に自分が仮で追加される\n\t!rc @non 21 -> 21時にnonが仮で追加される", inline=False)
+    embed.add_field(name="!d -> 挙手取り下げ", value="!d 21      -> 21時の自分の挙手を取り下げる\n\t!d @non 21 -> 21時のnonの挙手を取り下げる", inline=False)
+    embed.add_field(name="!rd -> 仮挙手取り下げ", value="!rd 21      -> 21時の自分の仮挙手を取り下げる\n\t!rd @non 21 -> 21時のnonの仮挙手を取り下げる", inline=False)
+    embed.add_field(name="!now  -> 現在の挙手状況の確認", value="WAR LISTの表示", inline=False)
+    embed.add_field(name="!mnow -> 現在の挙手状況の確認(everyoneメンション付)", value="WAR LISTの表示(everyoneメンション付)", inline=False)
+    embed.add_field(name="!clear -> 挙手リセット", value="WAR LISTのリセット", inline=False)
+    embed.add_field(name="!ch -> mention人数の設定", value="!ch 4   -> @4人になる時間に挙手したらメンションが付く\n※デフォルトは@3人", inline=False)
+    return embed
