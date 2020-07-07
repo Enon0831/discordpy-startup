@@ -312,6 +312,10 @@ async def rd(ctx,*args):
 @bot.command()
 async def ch(ctx,*args):
     for i in args:
+        if i == "-1":
+            m = "```mention設定をOFFにしました\n```"
+            guild[ctx.author.guild.id].mentionnum = -1
+            break
         if  str.isdecimal(i):
             if int(i) > 6:
                 m = "```5以下で設定してください\n```"
