@@ -199,7 +199,6 @@ async def c(ctx,*args):
     else:
         player = ctx.author
         m = player.name + "さんの挙手を確認しました"
-    await ctx.send(m)
 
     for i in args:
         # 指定した時間が登録されているか
@@ -219,7 +218,8 @@ async def c(ctx,*args):
                 role = discord.utils.get(ctx.guild.roles, name=str(i))
                 await player.add_roles(role)
     # 変更後の挙手状態を表示
-    m , embed = member.nowhands(guild[ctx.author.guild.id])
+    m2 , embed = member.nowhands(guild[ctx.author.guild.id])
+    m = m2 + m 
     await ctx.send(content=m,embed=embed)
     create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name)
     upload(ctx.author.guild.id)
@@ -236,7 +236,6 @@ async def rc(ctx,*args):
     else:
         player = ctx.author
         m = player.name + "さんの仮挙手を確認しました"
-    await ctx.send(m)
 
     for i in args:
         # 指定した時間が登録されているか
@@ -250,7 +249,8 @@ async def rc(ctx,*args):
                 role = discord.utils.get(ctx.guild.roles, name=str(i))
                 await player.add_roles(role)
     # 変更後の挙手状態を表示
-    m , embed = member.nowhands(guild[ctx.author.guild.id])
+    m2 , embed = member.nowhands(guild[ctx.author.guild.id])
+    m = m2 + m 
     await ctx.send(content=m,embed=embed)
     create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name)
     upload(ctx.author.guild.id)
@@ -267,7 +267,6 @@ async def d(ctx,*args):
     else:
         player = ctx.author
         m = player.name + "さんの挙手取り下げを確認しました"
-    await ctx.send(m)
 
     for i in args:
         # 指定した時間が登録されているか
@@ -276,7 +275,8 @@ async def d(ctx,*args):
             role = discord.utils.get(ctx.guild.roles, name=str(i))
             await player.remove_roles(role)
     # 変更後の挙手状態を表示
-    m , embed = member.nowhands(guild[ctx.author.guild.id])
+    m2 , embed = member.nowhands(guild[ctx.author.guild.id])
+    m = m2 + m 
     await ctx.send(content=m,embed=embed)
     create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name)
     upload(ctx.author.guild.id)
@@ -293,7 +293,6 @@ async def rd(ctx,*args):
     else:
         player = ctx.author
         m = player.name + "さんの仮挙手取り下げを確認しました"
-    await ctx.send(m)
 
     for i in args:
         # 指定した時間が登録されているか
@@ -302,7 +301,8 @@ async def rd(ctx,*args):
             role = discord.utils.get(ctx.guild.roles, name=str(i))
             await player.remove_roles(role)
     # 変更後の挙手状態を表示
-    m , embed = member.nowhands(guild[ctx.author.guild.id])
+    m2 , embed = member.nowhands(guild[ctx.author.guild.id])
+    m = m2 + m 
     await ctx.send(content=m,embed=embed)
     create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name)
     upload(ctx.author.guild.id)
@@ -313,8 +313,8 @@ async def rd(ctx,*args):
 async def ch(ctx,*args):
     for i in args:
         if  str.isdecimal(i):
-            if int(i) > 8:
-                m = "```7以下で設定してください\n```"
+            if int(i) > 6:
+                m = "```5以下で設定してください\n```"
             else:
                 guild[ctx.author.guild.id].mentionnum = int(i)
                 m = "```\nmentionを送る人数を@" + str(i) + "人に変更しました\n```"
