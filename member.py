@@ -83,14 +83,14 @@ def nowhands(server):
         #mtmp = ""
         for i in server.time_key:
             if server.time[i].tmp == 1:
-                mtmp = " , ".join(str(x) for x in server.time[i].name) + " " + " , ".join(str(x) for x in server.time[i].res)
-                if mtmp == "":
-                    mtmp = "なし"
+                mtmp = ">>> " + " , ".join(str(x) for x in server.time[i].name) + " " + " , ".join(str(x) for x in server.time[i].res)
+                if mtmp == ">>> ":
+                    mtmp = ">>> なし"
                 embed.add_field(name="".join(str(x) for x in server.time[i].n), value=mtmp, inline=False)
             else:
-                mtmp = " , ".join(str(x) for x in server.time[i].name)
-                if mtmp == "":
-                    mtmp = "なし"
+                mtmp = ">>> " + " , ".join(str(x) for x in server.time[i].name)
+                if mtmp == ">>> ":
+                    mtmp = ">>> なし"
                 embed.add_field(name="".join(str(x) for x in server.time[i].n), value=mtmp, inline=False)
         m = mall# + mwar + "```" + mtmp + "```"
     return m , embed
