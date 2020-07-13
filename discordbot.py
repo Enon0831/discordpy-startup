@@ -116,8 +116,7 @@ async def on_message(message):
  
 @bot.event
 async def on_command_error(ctx, error):
-    ch = ctx.channel.id
-    err_logch = 732076771796713492
+    ch = 732076771796713492
     embed = discord.Embed(title="エラー情報", description="", color=0xf00)
     embed.add_field(name="エラー発生サーバー名", value=ctx.guild.name, inline=False)
     embed.add_field(name="エラー発生サーバーID", value=ctx.guild.id, inline=False)
@@ -127,7 +126,6 @@ async def on_command_error(ctx, error):
     embed.add_field(name="発生エラー", value=error, inline=False)
     m = await bot.get_channel(ch).send(embed=embed)
     await ctx.send(f"何らかのエラーが発生しました。ごめんなさい。\nこのエラーについて問い合わせるときはこのコードも一緒にお知らせください：{m.id}")
-    m = await bot.get_channel(err_logch).send(embed=embed)
 
 
 # -------------------------------------------------------------------------------------------------------------
