@@ -128,7 +128,6 @@ async def on_command_error(ctx, error):
     m = await bot.get_channel(ch).send(embed=embed)
     await ctx.send(f"何らかのエラーが発生しました。ごめんなさい。\nこのエラーについて問い合わせるときはこのコードも一緒にお知らせください：{m.id}")
     m = await bot.get_channel(err_logch).send(embed=embed)
-    await ctx.send(f"何らかのエラーが発生しました。ごめんなさい。")
 
 
 # -------------------------------------------------------------------------------------------------------------
