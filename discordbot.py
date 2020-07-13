@@ -51,7 +51,7 @@ def read_csv(data):
     guild[id] = member.guild()
     if len(data[0]) > 1:
         guild[id].mentionnum = int(data[0][1])
-        if len(data[0]) >= 4:
+        if len(data[0]) > 3:
             guild[id].msg = int(data[0][3])
     data.pop(0)
     #time_key作成
@@ -113,6 +113,23 @@ async def on_message(message):
         if not message.author.guild.id in guild:
             guild[message.author.guild.id] = member.guild()
         await bot.process_commands(message)
+ 
+@bot.event
+async def on_command_error(ctx, error):
+    ch = ctx.channel.id
+    err_logch = 732076771796713492
+    embed = discord.Embed(title="エラー情報", description="", color=0xf00)
+    embed.add_field(name="エラー発生サーバー名", value=ctx.guild.name, inline=False)
+    embed.add_field(name="エラー発生サーバーID", value=ctx.guild.id, inline=False)
+    embed.add_field(name="エラー発生ユーザー名", value=ctx.author.name, inline=False)
+    embed.add_field(name="エラー発生ユーザーID", value=ctx.author.id, inline=False)
+    embed.add_field(name="エラー発生コマンド", value=ctx.message.content, inline=False)
+    embed.add_field(name="発生エラー", value=error, inline=False)
+    m = await bot.get_channel(ch).send(embed=embed)
+    await ctx.send(f"何らかのエラーが発生しました。ごめんなさい。\nこのエラーについて問い合わせるときはこのコードも一緒にお知らせください：{m.id}")
+    m = await bot.get_channel(err_logch).send(embed=embed)
+    await ctx.send(f"何らかのエラーが発生しました。ごめんなさい。")
+
 
 # -------------------------------------------------------------------------------------------------------------
 # コマンド関連
