@@ -197,8 +197,11 @@ async def now(ctx):
     if guild[ctx.author.guild.id].msg == "":
         pass
     else:
-        guild[ctx.author.guild.id].msg = await ctx.fetch_message(guild[ctx.author.guild.id].msg)
-        await guild[ctx.author.guild.id].msg.delete()
+        try:
+            guild[ctx.author.guild.id].msg = await ctx.fetch_message(guild[ctx.author.guild.id].msg)
+            await guild[ctx.author.guild.id].msg.delete()
+        except:
+            pass
     guild[ctx.author.guild.id].msg = await ctx.send(content=m,embed=embed)
     guild[ctx.author.guild.id].msg = guild[ctx.author.guild.id].msg.id
 # -------------------------------------------------------------------------------------------------------------
@@ -211,8 +214,11 @@ async def mnow(ctx):
     if guild[ctx.author.guild.id].msg == "":
         pass
     else:
-        guild[ctx.author.guild.id].msg = await ctx.fetch_message(guild[ctx.author.guild.id].msg)
-        await guild[ctx.author.guild.id].msg.delete()
+        try:
+            guild[ctx.author.guild.id].msg = await ctx.fetch_message(guild[ctx.author.guild.id].msg)
+            await guild[ctx.author.guild.id].msg.delete()
+        except:
+            pass
     guild[ctx.author.guild.id].msg = await ctx.send(content=m,embed=embed)
     guild[ctx.author.guild.id].msg = guild[ctx.author.guild.id].msg.id
 # -------------------------------------------------------------------------------------------------------------
@@ -252,8 +258,11 @@ async def c(ctx,*args):
     if guild[ctx.author.guild.id].msg == "":
         pass
     else:
-        guild[ctx.author.guild.id].msg = await ctx.fetch_message(guild[ctx.author.guild.id].msg)
-        await guild[ctx.author.guild.id].msg.delete()
+        try:
+            guild[ctx.author.guild.id].msg = await ctx.fetch_message(guild[ctx.author.guild.id].msg)
+            await guild[ctx.author.guild.id].msg.delete()
+        except:
+            pass
     guild[ctx.author.guild.id].msg = await ctx.send(content=m,embed=embed)
     guild[ctx.author.guild.id].msg = guild[ctx.author.guild.id].msg.id
     create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name,guild[ctx.author.guild.id].msg)
@@ -289,8 +298,11 @@ async def rc(ctx,*args):
     if guild[ctx.author.guild.id].msg == "":
         pass
     else:
-        guild[ctx.author.guild.id].msg = await ctx.fetch_message(guild[ctx.author.guild.id].msg)
-        await guild[ctx.author.guild.id].msg.delete()
+        try:
+            guild[ctx.author.guild.id].msg = await ctx.fetch_message(guild[ctx.author.guild.id].msg)
+            await guild[ctx.author.guild.id].msg.delete()
+        except:
+            pass
     guild[ctx.author.guild.id].msg = await ctx.send(content=m,embed=embed)
     guild[ctx.author.guild.id].msg = guild[ctx.author.guild.id].msg.id
     create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name,guild[ctx.author.guild.id].msg)
@@ -321,8 +333,11 @@ async def d(ctx,*args):
     if guild[ctx.author.guild.id].msg == "":
         pass
     else:
-        guild[ctx.author.guild.id].msg = await ctx.fetch_message(guild[ctx.author.guild.id].msg)
-        await guild[ctx.author.guild.id].msg.delete()
+        try:
+            guild[ctx.author.guild.id].msg = await ctx.fetch_message(guild[ctx.author.guild.id].msg)
+            await guild[ctx.author.guild.id].msg.delete()
+        except:
+            pass
     guild[ctx.author.guild.id].msg = await ctx.send(content=m,embed=embed)
     guild[ctx.author.guild.id].msg = guild[ctx.author.guild.id].msg.id
     create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name,guild[ctx.author.guild.id].msg)
@@ -353,8 +368,11 @@ async def rd(ctx,*args):
     if guild[ctx.author.guild.id].msg == "":
         pass
     else:
-        guild[ctx.author.guild.id].msg = await ctx.fetch_message(guild[ctx.author.guild.id].msg)
-        await guild[ctx.author.guild.id].msg.delete()
+        try:
+            guild[ctx.author.guild.id].msg = await ctx.fetch_message(guild[ctx.author.guild.id].msg)
+            await guild[ctx.author.guild.id].msg.delete()
+        except:
+            pass
     guild[ctx.author.guild.id].msg = await ctx.send(content=m,embed=embed)
     guild[ctx.author.guild.id].msg = guild[ctx.author.guild.id].msg.id
     create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name,guild[ctx.author.guild.id].msg)
