@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord.ext.commands import CommandNotFound
 import os
 import pickle
 import member
@@ -116,16 +117,17 @@ async def on_message(message):
  
 @bot.event
 async def on_command_error(ctx, error):
-    ch = 732076771796713492
-    embed = discord.Embed(title="エラー情報", description="", color=0xf00)
-    embed.add_field(name="エラー発生サーバー名", value=ctx.guild.name, inline=False)
-    embed.add_field(name="エラー発生サーバーID", value=ctx.guild.id, inline=False)
-    embed.add_field(name="エラー発生ユーザー名", value=ctx.author.name, inline=False)
-    embed.add_field(name="エラー発生ユーザーID", value=ctx.author.id, inline=False)
-    embed.add_field(name="エラー発生コマンド", value=ctx.message.content, inline=False)
-    embed.add_field(name="発生エラー", value=error, inline=False)
-    m = await bot.get_channel(ch).send(embed=embed)
-    await ctx.send(f"何らかのエラーが発生しました。ごめんなさい。\nこのエラーについて問い合わせるときはこのコードも一緒にお知らせください：{m.id}")
+    if not isinstance(error, CommandNotFound):
+        ch = 732076771796713492
+        embed = discord.Embed(title="エラー情報", description="", color=0xf00)
+        embed.add_field(name="エラー発生サーバー名", value=ctx.guild.name, inline=False)
+        embed.add_field(name="エラー発生サーバーID", value=ctx.guild.id, inline=False)
+        embed.add_field(name="エラー発生ユーザー名", value=ctx.author.name, inline=False)
+        embed.add_field(name="エラー発生ユーザーID", value=ctx.author.id, inline=False)
+        embed.add_field(name="エラー発生コマンド", value=ctx.message.content, inline=False)
+        embed.add_field(name="発生エラー", value=error, inline=False)
+        m = await bot.get_channel(ch).send(embed=embed)
+        await ctx.send(f"何らかのエラーが発生しました。ごめんなさい。\nこのエラーについて問い合わせるときはこのコードも一緒にお知らせください：{m.id}")
 
 
 # -------------------------------------------------------------------------------------------------------------
@@ -228,7 +230,8 @@ async def mnow(ctx):
 async def c(ctx,*args):
     # 他人の操作をしようとしたとき、「player」変数に格納
     if (len(args) > 1) and (args[0][:2] == "<@"):
-        id = int(args[0][3:21])
+        id_sub = args[0].translate(str.maketrans({"<":"","@":"",">":"","!":""}))
+        id = int(id_sub)
         player = ctx.author.guild.get_member(id)
         m = player.name + "さんの挙手を追加します"
     else:
@@ -274,7 +277,8 @@ async def c(ctx,*args):
 async def rc(ctx,*args):
     # 他人の操作をしようとしたとき、「player」変数に格納
     if (len(args) > 1) and (args[0][:2] == "<@"):
-        id = int(args[0][3:21])
+        id_sub = args[0].translate(str.maketrans({"<":"","@":"",">":"","!":""}))
+        id = int(id_sub)
         player = ctx.author.guild.get_member(id)
         m = player.name + "さんの仮挙手を追加します"
     else:
@@ -314,7 +318,8 @@ async def rc(ctx,*args):
 async def d(ctx,*args):
     # 他人の操作をしようとしたとき、「player」変数に格納
     if (len(args) > 1) and (args[0][:2] == "<@"):
-        id = int(args[0][3:21])
+        id_sub = args[0].translate(str.maketrans({"<":"","@":"",">":"","!":""}))
+        id = int(id_sub)
         player = ctx.author.guild.get_member(id)
         m = player.name + "さんの挙手を取り下げます"
     else:
@@ -349,7 +354,8 @@ async def d(ctx,*args):
 async def rd(ctx,*args):
     # 他人の操作をしようとしたとき、「player」変数に格納
     if (len(args) > 1) and (args[0][:2] == "<@"):
-        id = int(args[0][3:21])
+        id_sub = args[0].translate(str.maketrans({"<":"","@":"",">":"","!":""}))
+        id = int(id_sub)
         player = ctx.author.guild.get_member(id)
         m = player.name + "さんの仮挙手を取り下げます"
     else:
