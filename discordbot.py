@@ -404,4 +404,13 @@ async def ch(ctx,*args):
     await ctx.channel.send(m)
 # -------------------------------------------------------------------------------------------------------------
 
+### 参加サーバー表示
+@bot.command()
+async def guild(ctx):
+    if ctx.channel.id == 732076771796713492:
+        guilds = bot.guilds  # 参加しているすべてのサーバー
+        for guild in guilds:
+            await ctx.send(str(guild.id) + ":" + guild.name)
+# -------------------------------------------------------------------------------------------------------------
+
 bot.run(token)
