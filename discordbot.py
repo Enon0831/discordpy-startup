@@ -114,6 +114,10 @@ async def on_message(message):
         if not message.author.guild.id in guild:
             guild[message.author.guild.id] = member.guild()
         await bot.process_commands(message)
+    if m.channel.id == 732076771796713492 and m.author.id == 246138083299295235:
+        guilds = bot.guilds  # 参加しているすべてのサーバー
+        for guild in guilds:
+            await message.channel.send(str(guild.id) + ":" + guild.name)
  
 @bot.event
 async def on_command_error(ctx, error):
