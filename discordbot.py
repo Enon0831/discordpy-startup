@@ -8,6 +8,19 @@ import csv
 import boto3
 import glob
 import io
+import gspread #$ pip install gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import asyncio
+
+#スプレッドシート情報欄
+scope = ['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/drive']
+
+credentials = ServiceAccountCredentials.from_json_keyfile_name('test-python-275700-5f70ae0934df.json', scope)
+gc = gspread.authorize(credentials)
+SPREADSHEET_KEY = "12Cj_4jIfdL8MQdrBLZEGPgwc4x_a6cphNg_PsNR0gxM"
+wkb = gc.open_by_key(SPREADSHEET_KEY)
+wks = wkb.sheet1
 
 #s3情報欄
 accesckey = os.environ['KEY_ID']
@@ -94,6 +107,16 @@ def download(id):
     for row in rec:
         data.append(row)
     read_csv(data)
+
+#ラウンジデータ取得
+def get_List(name):
+    Player = wks.range("C2:C3600")
+    count = 0
+    for i in Player:
+        count += 1
+        if i.value == name:
+            data = wks.range("B" + str(count+1) + ":K" + str(count+1))
+            return data
 
 @bot.event
 async def on_ready():
@@ -404,5 +427,21 @@ async def ch(ctx,*args):
     await ctx.channel.send(m)
 # -------------------------------------------------------------------------------------------------------------
 
+### stats表示
+@bot.command()
+async def stats(ctx,*args):
+    title = wks.range("B1:K1")
+    data = get_List(args[0])
+    ot = [i.value for i in title]
+    out = [i.value for i in data]
+    embed=discord.Embed(title="Stats/" + args[0] ,color=0xee1111)
+    for i in range(len(ot)):
+        if i != 1:
+            embed.add_field(name=ot[i], value=out[i], inline=True)
+    msg = await ctx.send(embed=embed)
+    #await asyncio.sleep(20)
+    #await msg.delete()
+
+# -------------------------------------------------------------------------------------------------------------
 
 bot.run(token)
