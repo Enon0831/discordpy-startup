@@ -114,7 +114,7 @@ def get_List(name):
     count = 0
     for i in Player:
         count += 1
-        if i.value == name:
+        if i.value.lower() == name.lower():
             data = wks.range("B" + str(count+1) + ":K" + str(count+1))
             return data
 
@@ -127,10 +127,23 @@ async def on_ready():
 @bot.event
 async def on_guild_join(guild):
     CHANNEL_ID = 744741657769148457
-    print(guild.owner)
     channel = bot.get_channel(CHANNEL_ID)
     await channel.send(guild.name + "に導入されました\n" + "代表者は" + str(guild.owner) + "です。")
     guilds = bot.guilds
+    num = len(guilds)
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(num)+"servers"))
+
+@bot.event
+@bot.event
+async def on_guild_remove(guild):
+    CHANNEL_ID = 744741657769148457
+    channel = bot.get_channel(CHANNEL_ID)
+    await channel.send(guild.name + "から削除されました")
+    guilds = bot.guilds
+    li = ""
+    for i in guilds:
+        li += i.name + "\n"
+    await channel.send(li)
     num = len(guilds)
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(num)+"servers"))
 
@@ -448,7 +461,7 @@ async def stats(ctx,*args):
     else:
         ot = [i.value for i in title]
         out = [i.value for i in data]
-        embed=discord.Embed(title="Stats/" + name ,color=0xee1111)
+        embed=discord.Embed(title="Stats/" + data[1].value ,color=0xee1111)
         for i in range(len(ot)):
             if i != 1:
                 embed.add_field(name=ot[i], value=out[i], inline=True)
