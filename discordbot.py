@@ -122,7 +122,7 @@ def get_List(name):
 async def on_ready():
     guilds = bot.guilds
     num = len(guilds)
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(num)+"serversを"))
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(num)+"servers"))
 
 @bot.event
 async def on_guild_join(guild):
