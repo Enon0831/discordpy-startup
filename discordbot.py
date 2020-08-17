@@ -126,7 +126,7 @@ async def on_ready():
 
 @bot.event
 async def on_guild_join(guild):
-    CHANNEL_ID = 535609800185217026#744741657769148457
+    CHANNEL_ID = 744741657769148457
     print(guild.owner)
     channel = bot.get_channel(CHANNEL_ID)
     await channel.send(guild.name + "に導入されました\n" + "代表者は" + str(guild.owner) + "です。")
