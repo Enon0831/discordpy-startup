@@ -437,13 +437,18 @@ async def ch(ctx,*args):
 @bot.command()
 async def stats(ctx,*args):
     title = wks.range("B1:K1")
-    data = get_List(args[0])
-    ot = [i.value for i in title]
-    out = [i.value for i in data]
-    embed=discord.Embed(title="Stats/" + args[0] ,color=0xee1111)
-    for i in range(len(ot)):
-        if i != 1:
-            embed.add_field(name=ot[i], value=out[i], inline=True)
+    name = " ".join(args)
+    data = get_List(name)
+    if data == None:
+        embed=discord.Embed(title="Stats/" + name ,color=0xee1111)
+        embed.add_field(name="Stats Data", value="None", inline=True)
+    else:
+        ot = [i.value for i in title]
+        out = [i.value for i in data]
+        embed=discord.Embed(title="Stats/" + name ,color=0xee1111)
+        for i in range(len(ot)):
+            if i != 1:
+                embed.add_field(name=ot[i], value=out[i], inline=True)
     msg = await ctx.send(embed=embed)
     #await asyncio.sleep(20)
     #await msg.delete()
