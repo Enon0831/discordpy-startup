@@ -125,12 +125,11 @@ async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(num)+"serversを"))
 
 @bot.event
-async def on_member_join(member):
-    if member.bot:
-        CHANNEL_ID = 744741657769148457
-        print(member.guild.owner)
-        channel = bot.get_channel(CHANNEL_ID)
-        await channel.send(member.guild.name + "に導入されました。\n" + "代表者は" + member.guild.owner + "です。")
+async def on_guild_join(guild):
+    CHANNEL_ID = 535609800185217026#744741657769148457
+    print(guild.owner)
+    channel = bot.get_channel(CHANNEL_ID)
+    await channel.send(guild.name + "に導入されました\n" + "代表者は" + guild.owner + "です。")
 
 @bot.event
 async def on_message(message):
