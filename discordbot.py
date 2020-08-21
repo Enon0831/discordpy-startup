@@ -142,7 +142,7 @@ async def on_guild_remove(guild):
     guilds = bot.guilds
     li = ""
     for i in guilds:
-        li += i.name + "\n"
+        li += i.name + " : " + str(i.owner) +"\n"
     await channel.send(li)
     num = len(guilds)
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(num)+"servers"))
