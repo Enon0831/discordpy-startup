@@ -497,7 +497,7 @@ async def stats(ctx,*args):
 
 ###guild list表示
 @bot.command()
-async def test(ctx,*args):
+async def admin(ctx,*args):
     if ctx.author.id == 246138083299295235:
         guilds = bot.guilds
         li = ""
