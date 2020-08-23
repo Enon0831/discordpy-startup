@@ -471,4 +471,16 @@ async def stats(ctx,*args):
 
 # -------------------------------------------------------------------------------------------------------------
 
+###guild list表示
+@bot.command()
+async def test(ctx,*args):
+    if ctx.author.id == 246138083299295235:
+        guilds = bot.guilds
+        li = ""
+        for i in guilds:
+            li += i.name + "(" + str(i.id) + ") : " + str(i.owner) +"\n"
+        await ctx.send(li)
+
+# -------------------------------------------------------------------------------------------------------------
+
 bot.run(token)
