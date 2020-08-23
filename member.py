@@ -16,13 +16,14 @@ class menber:
     def reserve(self,name):
         if len(self.res) == 0:
             self.tmp = 1
-            self.res.append("仮" + name)
+            self.res.append(name)
             for i in range(3):
                 self.n.insert(2+i,self.resn[i])
             self.n[3] += 1
         else:
-            self.res.append("仮" + name)
+            self.res.append(name)
             self.n[3] += 1
+        self.res.sort(reverse=True)
 
     def sub(self,name):
         for i in range(len(self.name)):
@@ -33,7 +34,7 @@ class menber:
 
     def reservedel(self,name):
         for i in range(len(self.res)):
-            if self.res[i] == "仮" + name:
+            if self.res[i] == name:
                 self.res.pop(i)
                 self.n[3] -= 1
                 break
@@ -102,8 +103,8 @@ def help():
     embed.add_field(name="!out -> 交流戦時間の削除", value="例:!out 21 22 23 -> 21~23時の交流戦時間を削除する", inline=False)
     embed.add_field(name="!c -> 挙手", value="!c 21      -> 21時に自分が追加される\n\t!c @non 21 -> 21時にnonが追加される", inline=False)
     embed.add_field(name="!rc -> 仮挙手", value="!rc 21      -> 21時に自分が仮で追加される\n\t!rc @non 21 -> 21時にnonが仮で追加される", inline=False)
+    embed.add_field(name="!s -> 補欠挙手", value="!s 21      -> 21時に自分が補欠で追加される\n\t!s @non 21 -> 21時nonが補欠で追加される", inline=False)
     embed.add_field(name="!d -> 挙手取り下げ", value="!d 21      -> 21時の自分の挙手を取り下げる\n\t!d @non 21 -> 21時のnonの挙手を取り下げる", inline=False)
-    embed.add_field(name="!rd -> 仮挙手取り下げ", value="!rd 21      -> 21時の自分の仮挙手を取り下げる\n\t!rd @non 21 -> 21時のnonの仮挙手を取り下げる", inline=False)
     embed.add_field(name="!now  -> 現在の挙手状況の確認", value="WAR LISTの表示", inline=False)
     embed.add_field(name="!mnow -> 現在の挙手状況の確認(everyoneメンション付)", value="WAR LISTの表示(everyoneメンション付)", inline=False)
     embed.add_field(name="!clear -> 挙手リセット", value="WAR LISTのリセット", inline=False)
