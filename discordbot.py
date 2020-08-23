@@ -290,7 +290,10 @@ async def c(ctx,*args):
             if not player.name in guild[ctx.author.guild.id].time[i].name:
                 # 仮挙手をしていた場合仮挙手を削除
                 if "仮" + player.name in guild[ctx.author.guild.id].time[i].res:
-                    guild[ctx.author.guild.id].time[i].reservedel(player.name)
+                    guild[ctx.author.guild.id].time[i].reservedel("仮" + player.name)
+                # 補欠挙手をしていた場合挙手を削除
+                if "補" + player.name in guild[ctx.author.guild.id].time[i].res:
+                    guild[ctx.author.guild.id].time[i].reservedel("補" + player.name)
                 if len(guild[ctx.author.guild.id].time[i].name) == 6:
                     guild[ctx.author.guild.id].time[i].reserve(player.name)
                 else:
@@ -338,7 +341,10 @@ async def rc(ctx,*args):
                 # 挙手をしていた場合挙手を削除
                 if player.name in guild[ctx.author.guild.id].time[i].name:
                     guild[ctx.author.guild.id].time[i].sub(player.name)
-                guild[ctx.author.guild.id].time[i].reserve(player.name)
+                # 補欠挙手をしていた場合挙手を削除
+                if "補" + player.name in guild[ctx.author.guild.id].time[i].res:
+                    guild[ctx.author.guild.id].time[i].reservedel("補" + player.name)
+                guild[ctx.author.guild.id].time[i].reserve("仮" + player.name)
                 role = discord.utils.get(ctx.guild.roles, name=str(i))
                 await player.add_roles(role)
     # 変更後の挙手状態を表示
@@ -358,6 +364,51 @@ async def rc(ctx,*args):
     upload(ctx.author.guild.id)
 # -------------------------------------------------------------------------------------------------------------
 
+### 補欠挙手
+@bot.command()
+async def s(ctx,*args):
+    # 他人の操作をしようとしたとき、「player」変数に格納
+    if (len(args) > 1) and (args[0][:2] == "<@"):
+        id_sub = args[0].translate(str.maketrans({"<":"","@":"",">":"","!":""}))
+        id = int(id_sub)
+        player = ctx.author.guild.get_member(id)
+        m = player.name + "さんの補欠挙手を追加します"
+    else:
+        player = ctx.author
+        m = player.name + "さんの補欠挙手を確認しました"
+
+    for i in args:
+        # 指定した時間が登録されているか
+        if i in guild[ctx.author.guild.id].time:
+            # 指定した時間にすでに挙手をしているか
+            if not player.name in guild[ctx.author.guild.id].time[i].res:
+                # 挙手をしていた場合挙手を削除
+                if player.name in guild[ctx.author.guild.id].time[i].name:
+                    guild[ctx.author.guild.id].time[i].sub(player.name)
+                # 仮挙手をしていた場合挙手を削除
+                if "仮" + player.name in guild[ctx.author.guild.id].time[i].res:
+                    guild[ctx.author.guild.id].time[i].reservedel("仮" + player.name)
+                guild[ctx.author.guild.id].time[i].reserve("補" + player.name)
+                role = discord.utils.get(ctx.guild.roles, name=str(i))
+                await player.add_roles(role)
+    # 変更後の挙手状態を表示
+    m2 , embed = member.nowhands(guild[ctx.author.guild.id])
+    m = m2 + m 
+    if guild[ctx.author.guild.id].msg == "":
+        pass
+    else:
+        try:
+            guild[ctx.author.guild.id].msg = await ctx.fetch_message(guild[ctx.author.guild.id].msg)
+            await guild[ctx.author.guild.id].msg.delete()
+        except:
+            pass
+    guild[ctx.author.guild.id].msg = await ctx.send(content=m,embed=embed)
+    guild[ctx.author.guild.id].msg = guild[ctx.author.guild.id].msg.id
+    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name,guild[ctx.author.guild.id].msg)
+    upload(ctx.author.guild.id)
+
+# -------------------------------------------------------------------------------------------------------------
+
 ### 挙手取り下げ
 @bot.command()
 async def d(ctx,*args):
@@ -374,8 +425,16 @@ async def d(ctx,*args):
     for i in args:
         # 指定した時間が登録されているか
         if i in guild[ctx.author.guild.id].time:
-            guild[ctx.author.guild.id].time[i].sub(player.name)
             role = discord.utils.get(ctx.guild.roles, name=str(i))
+            # 挙手をしていた場合挙手を削除
+            if player.name in guild[ctx.author.guild.id].time[i].name:
+                guild[ctx.author.guild.id].time[i].sub(player.name)
+            # 仮挙手をしていた場合挙手を削除
+            if "仮" + player.name in guild[ctx.author.guild.id].time[i].res:
+                guild[ctx.author.guild.id].time[i].reservedel("仮" + player.name)
+            # 補欠挙手をしていた場合挙手を削除
+            if "補" + player.name in guild[ctx.author.guild.id].time[i].res:
+                guild[ctx.author.guild.id].time[i].reservedel("補" + player.name)
             await player.remove_roles(role)
     # 変更後の挙手状態を表示
     m2 , embed = member.nowhands(guild[ctx.author.guild.id])
@@ -392,42 +451,7 @@ async def d(ctx,*args):
     guild[ctx.author.guild.id].msg = guild[ctx.author.guild.id].msg.id
     create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name,guild[ctx.author.guild.id].msg)
     upload(ctx.author.guild.id)
-# -------------------------------------------------------------------------------------------------------------
 
-### 仮挙手取り下げ
-@bot.command()
-async def rd(ctx,*args):
-    # 他人の操作をしようとしたとき、「player」変数に格納
-    if (len(args) > 1) and (args[0][:2] == "<@"):
-        id_sub = args[0].translate(str.maketrans({"<":"","@":"",">":"","!":""}))
-        id = int(id_sub)
-        player = ctx.author.guild.get_member(id)
-        m = player.name + "さんの仮挙手を取り下げます"
-    else:
-        player = ctx.author
-        m = player.name + "さんの仮挙手取り下げを確認しました"
-
-    for i in args:
-        # 指定した時間が登録されているか
-        if i in guild[ctx.author.guild.id].time:
-            guild[ctx.author.guild.id].time[i].reservedel(player.name)
-            role = discord.utils.get(ctx.guild.roles, name=str(i))
-            await player.remove_roles(role)
-    # 変更後の挙手状態を表示
-    m2 , embed = member.nowhands(guild[ctx.author.guild.id])
-    m = m2 + m 
-    if guild[ctx.author.guild.id].msg == "":
-        pass
-    else:
-        try:
-            guild[ctx.author.guild.id].msg = await ctx.fetch_message(guild[ctx.author.guild.id].msg)
-            await guild[ctx.author.guild.id].msg.delete()
-        except:
-            pass
-    guild[ctx.author.guild.id].msg = await ctx.send(content=m,embed=embed)
-    guild[ctx.author.guild.id].msg = guild[ctx.author.guild.id].msg.id
-    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name,guild[ctx.author.guild.id].msg)
-    upload(ctx.author.guild.id)
 # -------------------------------------------------------------------------------------------------------------
 
 ### mention人数設定
