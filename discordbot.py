@@ -510,13 +510,13 @@ async def stats(ctx,*args):
     name = " ".join(args)
     data = get_List(name)
     if data == None:
-        embed=discord.Embed(title="Stats/" + name ,color=0xee1111)
+        embed=discord.Embed(title="Stats",description=name ,color=0xee1111)
         embed.add_field(name="Stats Data", value="None", inline=True)
     else:
         ot = [i.value for i in title]
         out = [i.value for i in data]
         img = judge(int(out[2]))
-        embed=discord.Embed(title="Stats/" + data[1].value ,color=0xee1111)
+        embed=discord.Embed(title="Stats",description=data[1].value ,color=0xee1111)
         embed.set_thumbnail(url=image[img])
         for i in range(len(ot)):
             if i != 1:
