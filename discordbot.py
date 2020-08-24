@@ -325,7 +325,7 @@ async def c(ctx,*args):
                 if "補" + player.name in guild[ctx.author.guild.id].time[i].res:
                     guild[ctx.author.guild.id].time[i].reservedel("補" + player.name)
                 if len(guild[ctx.author.guild.id].time[i].name) == 6:
-                    guild[ctx.author.guild.id].time[i].reserve(player.name)
+                    guild[ctx.author.guild.id].time[i].reserve("補" + player.name)
                 else:
                     guild[ctx.author.guild.id].time[i].add(player.name)
                 # 挙手した時間が@3以下だったらメンション付きにする
