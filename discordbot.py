@@ -130,23 +130,23 @@ def get_List(name):
 #ランク判定
 def judge(mmr):
     if mmr <=1999:
-        return "iron"
+        return "iron",0x6c6a6a
     elif 2000 <= mmr <= 3499:
-        return "bronze"
+        return "bronze",0xe17319
     elif 3500 <= mmr <= 4999:
-        return "silver"
+        return "silver",0xd1e1dc
     elif 5000 <= mmr <= 6499:
-        return "gold"
+        return "gold",0xdee114
     elif 6500 <= mmr <= 7999:
-        return "platinum"
+        return "platinum",0x2bd7ee
     elif 8000 <= mmr <= 9499:
-        return "sapphire"
+        return "sapphire",0x2b5bee
     elif 9500 <= mmr <= 10999:
-        return "diamond"
+        return "diamond",0xbee7f9
     elif 11000 <= mmr <= 12499:
-        return "master"
+        return "master",0x000000
     elif mmr <= 12500:
-        return "grandmaster"
+        return "grandmaster",0x000000
 
 @bot.event
 async def on_ready():
@@ -515,8 +515,8 @@ async def stats(ctx,*args):
     else:
         ot = [i.value for i in title]
         out = [i.value for i in data]
-        img = judge(int(out[2]))
-        embed=discord.Embed(title="Stats",description=data[1].value ,color=0xee1111)
+        img,color = judge(int(out[2]))
+        embed=discord.Embed(title="Stats",description=data[1].value ,color=color)
         embed.set_thumbnail(url=image[img])
         for i in range(len(ot)):
             if i != 1:
