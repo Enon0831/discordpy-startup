@@ -101,7 +101,7 @@ def read_csv(data):
             guild[id].time[time].add(data[i][j])
         if not rc == "":
             for j in range(rc):
-                guild[id].time[time].reserve(data[i][j+count][1:])
+                guild[id].time[time].reserve(data[i][j+count])
     guild[id].time_key = sorted(guild[id].time.keys())
 
 #s3にcsvのアップロード
