@@ -37,6 +37,15 @@ s3 = boto3.client('s3',aws_access_key_id=accesckey,aws_secret_access_key=secretk
 
 guild = {}
 
+image = {"iron":"https://cdn.discordapp.com/attachments/736282187770363976/743528091858763786/iron_s32.png",
+        "bronze":"https://cdn.discordapp.com/attachments/736282187770363976/743528106526113884/bronze_s3.png",
+        "silver":"https://cdn.discordapp.com/attachments/736282187770363976/743528159391121478/silver_s3.png",
+        "gold":"https://cdn.discordapp.com/attachments/736282187770363976/743528125127983124/gold_s3.png",
+        "platinum":"https://cdn.discordapp.com/attachments/736282187770363976/743528185731481662/platinum2.png",
+        "sapphire":"https://cdn.discordapp.com/attachments/736282187770363976/743528240232267936/sapphire_s3.png",
+        "diamond":"https://cdn.discordapp.com/attachments/736282187770363976/743528221923999924/diamonds3maybe.png",
+        "master":"https://cdn.discordapp.com/attachments/736282187770363976/743528268497682452/master_s32.png"}
+
 #s3からcsvファイルの取得
 def get_s3file(bucket_name, key):
     s3 = boto3.resource('s3',aws_access_key_id=accesckey,aws_secret_access_key=secretkey,region_name=ragion)
@@ -117,6 +126,27 @@ def get_List(name):
         if i.value.lower() == name.lower():
             data = wks.range("B" + str(count+1) + ":K" + str(count+1))
             return data
+
+#ランク判定
+def judge(mmr):
+    if mmr <=1999:
+        return "iron"
+    elif 2000 <= mmr <= 3499:
+        return "bronze"
+    elif 3500 <= mmr <= 4999:
+        return "silver"
+    elif 5000 <= mmr <= 6499:
+        return "gold"
+    elif 6500 <= mmr <= 7999:
+        return "platinum"
+    elif 8000 <= mmr <= 9499:
+        return "sapphire"
+    elif 9500 <= mmr <= 10999:
+        return "diamond"
+    elif 11000 <= mmr <= 12499:
+        return "master"
+    elif mmr <= 12500:
+        return "grandmaster"
 
 @bot.event
 async def on_ready():
@@ -485,7 +515,9 @@ async def stats(ctx,*args):
     else:
         ot = [i.value for i in title]
         out = [i.value for i in data]
+        img = judge(int(out[2]))
         embed=discord.Embed(title="Stats/" + data[1].value ,color=0xee1111)
+        embed.set_thumbnail(url=image[img])
         for i in range(len(ot)):
             if i != 1:
                 embed.add_field(name=ot[i], value=out[i], inline=True)
