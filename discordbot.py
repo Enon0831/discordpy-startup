@@ -127,6 +127,16 @@ def get_List(name):
             data = wks.range("B" + str(count+1) + ":K" + str(count+1))
             return data
 
+#mmr取得
+def get_mmr(name):
+    Player = wks.range("C2:C3600")
+    count = 0
+    for i in Player:
+        count += 1
+        if i.value.lower() == name.lower():
+            mmr = wks.cell(count+1,4).value
+            return mmr
+
 #ランク判定
 def judge(mmr):
     if mmr <=1999:
@@ -526,6 +536,20 @@ async def stats(ctx,*args):
     #await msg.delete()
 
 # -------------------------------------------------------------------------------------------------------------
+
+### mmr表示
+@bot.command()
+async def mmr(ctx,*args):
+    names = name = " ".join(args)
+    name = names.split(",")
+    embed=discord.Embed(title="MMR",color=0x000000)
+    for i in name:
+        mmr = get_mmr(i)
+        embed.add_field(name=i,value=mmr,inline=False)
+    await ctx.send(embed=embed)
+
+# -------------------------------------------------------------------------------------------------------------
+
 
 ###guild list表示
 @bot.command()
