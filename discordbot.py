@@ -550,16 +550,23 @@ async def mmr(ctx,*args):
 
 # -------------------------------------------------------------------------------------------------------------
 
-
 ###guild list表示
 @bot.command()
 async def admin(ctx,*args):
     if ctx.author.id == 246138083299295235:
         guilds = bot.guilds
-        li = ""
+        name = []
+        ID = []
+        Owner = []
+        embed=discord.Embed(title="Server LIST",color=0xee1111)
         for i in guilds:
-            li += i.name + "(" + str(i.id) + ") : " + str(i.owner) +"\n"
-        await ctx.send(li)
+            name.append(i.name)
+            ID.append(str(i.id))
+            Owner.append(str(i.owner))
+        embed.add_field(name="Name", value="\n".join(name), inline=True)
+        embed.add_field(name="ID", value="\n".join(ID), inline=True)
+        embed.add_field(name="Owner", value="\n".join(Owner), inline=True)
+        await ctx.send(embed=embed)
 
 # -------------------------------------------------------------------------------------------------------------
 
