@@ -158,6 +158,13 @@ def judge(mmr):
     elif mmr <= 12500:
         return "grandmaster",0x000000
 
+def guild_csv(name,ID,Owner):
+    with open("/tmp/" + "server list" + ".csv","w",newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow("name","ID","Oewner")
+        for i in range(len(name)):
+            writer.writerow(name[i],ID[i],Owner[i])
+
 @bot.event
 async def on_ready():
     guilds = bot.guilds
@@ -558,15 +565,11 @@ async def admin(ctx,*args):
         name = []
         ID = []
         Owner = []
-        embed=discord.Embed(title="Server LIST",color=0xee1111)
         for i in guilds:
             name.append(i.name)
             ID.append(str(i.id))
             Owner.append(str(i.owner))
-        embed.add_field(name="Name", value="\n".join(name), inline=True)
-        embed.add_field(name="ID", value="\n".join(ID), inline=True)
-        embed.add_field(name="Owner", value="\n".join(Owner), inline=True)
-        await ctx.send(embed=embed)
+        guild_csv(name,ID,Owner)
 
 # -------------------------------------------------------------------------------------------------------------
 
