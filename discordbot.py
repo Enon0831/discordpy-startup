@@ -161,9 +161,9 @@ def judge(mmr):
 def guild_csv(name,ID,Owner):
     with open("/tmp/" + "server list" + ".csv","w",newline="") as f:
         writer = csv.writer(f)
-        writer.writerow("name","ID","Oewner")
+        writer.writerow(["name","ID","Oewner"])
         for i in range(len(name)):
-            writer.writerow(name[i],ID[i],Owner[i])
+            writer.writerow([name[i],ID[i],Owner[i]])
 
 @bot.event
 async def on_ready():
@@ -180,7 +180,6 @@ async def on_guild_join(guild):
     num = len(guilds)
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(num)+"servers"))
 
-@bot.event
 @bot.event
 async def on_guild_remove(guild):
     CHANNEL_ID = 744741657769148457
