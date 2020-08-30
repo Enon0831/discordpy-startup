@@ -164,6 +164,8 @@ def guild_csv(name,ID,Owner):
         writer.writerow(["name","ID","Oewner"])
         for i in range(len(name)):
             writer.writerow([name[i],ID[i],Owner[i]])
+        cfile = "/tmp/" + "server list" + ".csv"
+        s3.upload_file(cfile,bucket_name,cfile[5:])
 
 @bot.event
 async def on_ready():
