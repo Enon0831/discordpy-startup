@@ -11,6 +11,7 @@ import io
 import gspread #$ pip install gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import asyncio
+import random
 
 #スプレッドシート情報欄
 scope = ['https://spreadsheets.google.com/feeds',
@@ -542,7 +543,6 @@ async def stats(ctx,*args):
     msg = await ctx.send(embed=embed)
     #await asyncio.sleep(20)
     #await msg.delete()
-
 # -------------------------------------------------------------------------------------------------------------
 
 ### mmr表示
@@ -555,7 +555,6 @@ async def mmr(ctx,*args):
         mmr = get_mmr(i)
         embed.add_field(name=i,value=mmr,inline=False)
     await ctx.send(embed=embed)
-
 # -------------------------------------------------------------------------------------------------------------
 
 ###guild list表示
@@ -571,7 +570,18 @@ async def admin(ctx,*args):
             ID.append(str(i.id))
             Owner.append(str(i.owner))
         guild_csv(name,ID,Owner)
+# -------------------------------------------------------------------------------------------------------------
 
+###外交選出
+@bot.command()
+async def pick(ctx,*args):
+    for i in args:
+        # 指定した時間が登録されているか
+        if i in guild[ctx.author.guild.id].time:
+            Candidate = guild[ctx.author.guild.id].time[i].name + guild[ctx.author.guild.id].time[i].res
+            Dip = random.choice(Candidate)
+            Out = ctx.guild.get_member_named(Dip)
+    await ctx.send(Out.mention + "さん外交お願いします。")
 # -------------------------------------------------------------------------------------------------------------
 
 bot.run(token)
