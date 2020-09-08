@@ -580,6 +580,8 @@ async def pick(ctx,*args):
         if i in guild[ctx.author.guild.id].time:
             Candidate = guild[ctx.author.guild.id].time[i].name + guild[ctx.author.guild.id].time[i].res
             Dip = random.choice(Candidate)
+            if Dip[:1] == "補" or Dip[:1] == "仮":
+                Dip = Dip[1:]
             Out = ctx.guild.get_member_named(Dip)
     await ctx.send(Out.mention + "さん外交お願いします。")
 # -------------------------------------------------------------------------------------------------------------
