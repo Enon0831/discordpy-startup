@@ -182,44 +182,44 @@ def guild_csv(name,ID,Owner):
 
 #経験値書込み(個人)
 def exp_run_p(ctx,counter):
+    user_id = personal.range("B2:B1000")
     for user in counter:
         countR = 0
         countC = 0
-        user_id = personal.range("A2:A1000")
         for i in user_id:
             countR += 1
             #個人登録が無い場合
             if i.value == "":
-                personal.update_cell(countR+1,1,str(user.id))
-                personal.update_cell(countR+1,2,user.name)
-                personal.update_cell(countR+1,6,str(ctx.guild.id))
-                personal.update_cell(countR+1,7,counter[user])
+                personal.update_cell(countR+1,1,user.name)
+                personal.update_cell(countR+1,2,str(user.id))
+                personal.update_cell(countR+1,3,str(ctx.guild.id))
+                personal.update_cell(countR+1,4,counter[user])
                 break
             #個人検索
             elif str(user.id) == i.value:
-                clan = personal.range("F" + str(countR+1) +":X" + str(countR+1))
+                clan = personal.range("C" + str(countR+1) +":V" + str(countR+1))
                 for j in clan:
                     countC += 1
                     #clanが無い場合
                     if j.value == "":
-                        personal.update_cell(countR+1,countC+5,str(ctx.guild.id))
-                        personal.update_cell(countR+1,countC+6,counter[user])
+                        personal.update_cell(countR+1,countC+2,str(ctx.guild.id))
+                        personal.update_cell(countR+1,countC+3,counter[user])
                         break
                     #clan検索
                     elif str(ctx.guild.id) == j.value:
-                        old_exp = personal.cell(countR+1,countC+6).value
-                        personal.update_cell(countR+1,countC+6,int(old_exp) + counter[user])
+                        old_exp = personal.cell(countR+1,countC+3).value
+                        personal.update_cell(countR+1,countC+3,int(old_exp) + counter[user])
                         break
                 break
                     
 #経験値書込み(チーム)
 def exp_run_t(ctx,team_exp):
-    team_id = team.range("A2:A1000")
+    team_id = team.range("B2:B1000")
     count = 0
     for i in team_id:
         count += 1
         if i.value == "":
-            team.update_cell(count+1,1,str(ctx.guild.id))
+            team.update_cell(count+1,2,str(ctx.guild.id))
             team.update_cell(count+1,3,team_exp[ctx.guild.id])
             break
         elif str(ctx.guild.id) == i.value:
@@ -670,25 +670,24 @@ async def pick(ctx,*args):
             Out = ctx.guild.get_member_named(Dip)
     await ctx.send(Out.mention + "さん外交お願いします。")
 # -------------------------------------------------------------------------------------------------------------
+
 ###経験値確認
 @bot.command()
 async def exp(ctx,*args):
-    data = 0
     embed = discord.Embed()
     if args[0] == "team":
         Team = ctx.guild.name
         img = ctx.guild.icon_url
-        team_id = team.range("A2:A1000")
+        team_id = team.range("B2:B1000")
         count = 0
         for i in team_id:
             count += 1
             if i.value == "":
-                if data == 0:
+                if count == 1:
                     embed.set_author(name=Team+" status",icon_url=img)
                     embed.add_field(name="No Data",value="Not found",inline=True)
                 break
             elif str(ctx.guild.id) == i.value:
-                data = 1
                 embed.set_author(name=Team+" status",icon_url=img)
                 embed.add_field(name="Lv",value=team.cell(count+1,4).value,inline=True)
                 embed.add_field(name="next Lv",value=team.cell(count+1,5).value,inline=True)
@@ -696,28 +695,27 @@ async def exp(ctx,*args):
     if args[0] == "player":
         Player = ctx.author.name
         img = ctx.author.avatar_url
-        user_id = personal.range("A2:A1000")
+        user_id = personal.range("B2:B1000")
         count = 0
         for i in user_id:
             count += 1
             if i.value == "":
-                if data == 0:
+                if count == 1:
                     embed.set_author(name=Player+"'s status",icon_url=img)
                     embed.add_field(name="No Data",value="Not found",inline=True)
                 break
             elif str(ctx.author.id) == i.value:
-                data = 1
                 embed.set_author(name=Player+"'s status",icon_url=img)
                 embed.add_field(name="Lv",value=show.cell(count+1,3).value,inline=True)
                 embed.add_field(name="next Lv",value=show.cell(count+1,4).value,inline=True)
-                embed.add_field(name="Total EXP",value=show.cell(count+1,2).value + " exp",inline=True)
-                for j in range(0,10,2):
-                    if show.cell(count+1,j+5).value == "":
+                embed.add_field(name="Total EXP",value=show.cell(count+1,2).value + " EXP",inline=True)
+                for j in range(0,20,2):
+                    if show.cell(count+1,j+6).value == "":
                         break
                     else:
-                        embed.add_field(name=show.cell(count+1,j+5).value,value=show.cell(count+1,j+6).value + " exp",inline=True)
+                        embed.add_field(name=show.cell(count+1,j+5).value,value=show.cell(count+1,j+6).value + " EXP",inline=True)
     if args[0] == "team" or args[0] == "player":
         await ctx.send(embed=embed)
-
 # -------------------------------------------------------------------------------------------------------------
+
 bot.run(token)
