@@ -13,15 +13,27 @@ from oauth2client.service_account import ServiceAccountCredentials
 import asyncio
 import random
 
+######################################################################################################################
 #スプレッドシート情報欄
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
 
 credentials = ServiceAccountCredentials.from_json_keyfile_name('test-python-275700-5f70ae0934df.json', scope)
 gc = gspread.authorize(credentials)
+# - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - 
+### ラウンジレート
 SPREADSHEET_KEY = "12Cj_4jIfdL8MQdrBLZEGPgwc4x_a6cphNg_PsNR0gxM"
 wkb = gc.open_by_key(SPREADSHEET_KEY)
 wks = wkb.sheet1
+# - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - 
+### 挙手経験値シート
+SPSHEET_KEY = "1s5ApIPhLL8xS1s2OokhBf3ycbgE6Wrow1Lc8cgxxENY"
+EXP = gc.open_by_key(SPSHEET_KEY)
+personal = EXP.worksheet("個人経験値")
+team = EXP.worksheet("チーム経験値")
+show = EXP.worksheet("personal_data")
+# - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - 
+######################################################################################################################
 
 #s3情報欄
 accesckey = os.environ['KEY_ID']
@@ -168,6 +180,77 @@ def guild_csv(name,ID,Owner):
     cfile = "/tmp/" + "server list" + ".csv"
     s3.upload_file(cfile,bucket_name,cfile[5:])
 
+#経験値書込み(個人)
+def exp_run_p(ctx,counter):
+    user_id = personal.range("A2:A1000")
+    for user in counter:
+        countR = 0
+        countC = 0
+        for i in user_id:
+            countR += 1
+            #個人登録が無い場合
+            if i.value == "":
+                personal.update_cell(countR+1,1,str(user.id))
+                personal.update_cell(countR+1,2,user.name)
+                personal.update_cell(countR+1,6,str(ctx.guild.id))
+                personal.update_cell(countR+1,7,counter[user])
+                break
+            #個人検索
+            elif str(user.id) == i.value:
+                clan = personal.range("F" + str(countR+1) +":X" + str(countR+1))
+                for j in clan:
+                    countC += 1
+                    #clanが無い場合
+                    if j.value == "":
+                        personal.update_cell(countR+1,countC+5,str(ctx.guild.id))
+                        personal.update_cell(countR+1,countC+6,counter[user])
+                        break
+                    #clan検索
+                    elif str(ctx.guild.id) == j.value:
+                        old_exp = personal.cell(countR+1,countC+6).value
+                        personal.update_cell(countR+1,countC+6,int(old_exp) + counter[user])
+                        break
+                break
+                    
+#経験値書込み(チーム)
+def exp_run_t(ctx,team_exp):
+    team_id = team.range("A2:A1000")
+    count = 0
+    for i in team_id:
+        count += 1
+        if i.value == "":
+            team.update_cell(count+1,1,str(ctx.guild.id))
+            team.update_cell(count+1,3,team_exp[ctx.guild.id])
+            break
+        elif str(ctx.guild.id) == i.value:
+            old_exp = personal.cell(count+1,3).value
+            team.update_cell(count+1,3,int(old_exp)+team_exp[ctx.guild.id])
+            break
+
+#経験値計算
+def get_exp(ctx,reg):
+    counter = {}
+    team_exp = {ctx.guild.id:0}
+    #詳細吸出し
+    for i in reg:
+        if len(i) >= 6:
+            team_exp[ctx.guild.id] += 1
+        for j in i:    
+            if j[:1] == "補" or j[:1] == "仮":
+                P = j[1:]
+                n = 1
+            else:
+                P = j
+                n = 2
+            name = ctx.guild.get_member_named(P)
+            if name in counter:
+                counter[name] += n
+            else:
+                counter[name] = n
+    #
+    exp_run_p(ctx,counter)
+    exp_run_t(ctx,team_exp)
+
 @bot.event
 async def on_ready():
     guilds = bot.guilds
@@ -273,7 +356,10 @@ async def out(ctx,*args):
 ### 挙手リセット
 @bot.command()
 async def clear(ctx):
+    reg = []
     for i in guild[ctx.author.guild.id].time.keys():
+        Players = guild[ctx.author.guild.id].time[i].name + guild[ctx.author.guild.id].time[i].res
+        reg.append(Players)
         guild[ctx.author.guild.id].clear(str(i))
         #役職リセット
         role = discord.utils.get(ctx.guild.roles, name=str(i))
@@ -282,8 +368,7 @@ async def clear(ctx):
     m , embed = member.nowhands(guild[ctx.author.guild.id])
     guild[ctx.author.guild.id].msg = await ctx.send(content=m,embed=embed)
     guild[ctx.author.guild.id].msg = guild[ctx.author.guild.id].msg.id
-    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name,guild[ctx.author.guild.id].msg)
-    upload(ctx.author.guild.id)
+    get_exp(ctx,reg)
 # -------------------------------------------------------------------------------------------------------------
 
 ### 現在挙手状況表示
@@ -455,7 +540,6 @@ async def s(ctx,*args):
     guild[ctx.author.guild.id].msg = guild[ctx.author.guild.id].msg.id
     create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name,guild[ctx.author.guild.id].msg)
     upload(ctx.author.guild.id)
-
 # -------------------------------------------------------------------------------------------------------------
 
 ### 挙手取り下げ
@@ -500,7 +584,6 @@ async def d(ctx,*args):
     guild[ctx.author.guild.id].msg = guild[ctx.author.guild.id].msg.id
     create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name,guild[ctx.author.guild.id].msg)
     upload(ctx.author.guild.id)
-
 # -------------------------------------------------------------------------------------------------------------
 
 ### mention人数設定
@@ -586,4 +669,51 @@ async def pick(ctx,*args):
     await ctx.send(Out.mention + "さん外交お願いします。")
 # -------------------------------------------------------------------------------------------------------------
 
+###経験値確認
+@bot.command()
+async def exp(ctx,*args):
+    embed = discord.Embed()
+    if args[0] == "team":
+        Team = ctx.guild.name
+        img = ctx.guild.icon_url
+        team_id = team.range("A2:A1000")
+        count = 0
+        for i in team_id:
+            count += 1
+            if i.value == "":
+                if count == 1:
+                    embed.set_author(name=Team+" status",icon_url=img)
+                    embed.add_field(name="No Data",value="Not found",inline=True)
+                break
+            elif str(ctx.guild.id) == i.value:
+                embed.set_author(name=Team+" status",icon_url=img)
+                embed.add_field(name="Lv",value=team.cell(count+1,4).value,inline=True)
+                embed.add_field(name="next Lv",value=team.cell(count+1,5).value,inline=True)
+                break
+    if args[0] == "player":
+        Player = ctx.author.name
+        img = ctx.author.avatar_url
+        user_id = personal.range("A2:A1000")
+        count = 0
+        for i in user_id:
+            count += 1
+            if i.value == "":
+                if count == 1:
+                    embed.set_author(name=Player+"'s status",icon_url=img)
+                    embed.add_field(name="No Data",value="Not found",inline=True)
+                break
+            elif str(ctx.author.id) == i.value:
+                embed.set_author(name=Player+"'s status",icon_url=img)
+                embed.add_field(name="Lv",value=show.cell(count+1,3).value,inline=True)
+                embed.add_field(name="next Lv",value=show.cell(count+1,4).value,inline=True)
+                embed.add_field(name="Total EXP",value=show.cell(count+1,2).value + " exp",inline=True)
+                for j in range(0,10,2):
+                    if show.cell(count+1,j+5).value == "":
+                        break
+                    else:
+                        embed.add_field(name=show.cell(count+1,j+5).value,value=show.cell(count+1,j+6).value + " exp",inline=True)
+    if args[0] == "team" or args[0] == "player":
+        await ctx.send(embed=embed)
+
+# -------------------------------------------------------------------------------------------------------------
 bot.run(token)
