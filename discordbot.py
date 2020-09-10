@@ -184,7 +184,7 @@ def guild_csv(name,ID,Owner):
 def exp_run_p(ctx,counter):
     user_id = personal.range("A2:A1000")
     for user in counter:
-        countR = 0
+        countR = 1
         countC = 0
         for i in user_id:
             countR += 1
