@@ -368,6 +368,8 @@ async def clear(ctx):
     m , embed = member.nowhands(guild[ctx.author.guild.id])
     guild[ctx.author.guild.id].msg = await ctx.send(content=m,embed=embed)
     guild[ctx.author.guild.id].msg = guild[ctx.author.guild.id].msg.id
+    create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name,guild[ctx.author.guild.id].msg)
+    upload(ctx.author.guild.id)
     get_exp(ctx,reg)
 # -------------------------------------------------------------------------------------------------------------
 
@@ -668,10 +670,10 @@ async def pick(ctx,*args):
             Out = ctx.guild.get_member_named(Dip)
     await ctx.send(Out.mention + "さん外交お願いします。")
 # -------------------------------------------------------------------------------------------------------------
-
 ###経験値確認
 @bot.command()
 async def exp(ctx,*args):
+    data = 0
     embed = discord.Embed()
     if args[0] == "team":
         Team = ctx.guild.name
@@ -681,11 +683,12 @@ async def exp(ctx,*args):
         for i in team_id:
             count += 1
             if i.value == "":
-                if count == 1:
+                if data == 0:
                     embed.set_author(name=Team+" status",icon_url=img)
                     embed.add_field(name="No Data",value="Not found",inline=True)
                 break
             elif str(ctx.guild.id) == i.value:
+                data = 1
                 embed.set_author(name=Team+" status",icon_url=img)
                 embed.add_field(name="Lv",value=team.cell(count+1,4).value,inline=True)
                 embed.add_field(name="next Lv",value=team.cell(count+1,5).value,inline=True)
@@ -698,11 +701,12 @@ async def exp(ctx,*args):
         for i in user_id:
             count += 1
             if i.value == "":
-                if count == 1:
+                if data == 0:
                     embed.set_author(name=Player+"'s status",icon_url=img)
                     embed.add_field(name="No Data",value="Not found",inline=True)
                 break
             elif str(ctx.author.id) == i.value:
+                data = 1
                 embed.set_author(name=Player+"'s status",icon_url=img)
                 embed.add_field(name="Lv",value=show.cell(count+1,3).value,inline=True)
                 embed.add_field(name="next Lv",value=show.cell(count+1,4).value,inline=True)
