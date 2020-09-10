@@ -183,7 +183,7 @@ def guild_csv(name,ID,Owner):
 #経験値書込み(個人)
 def exp_run_p(ctx,counter):
     for user in counter:
-        countR = 1
+        countR = 0
         countC = 0
         user_id = personal.range("A2:A1000")
         for i in user_id:
