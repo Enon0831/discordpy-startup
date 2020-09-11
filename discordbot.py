@@ -220,21 +220,21 @@ def exp_run_t(ctx,team_exp):
         count += 1
         if i.value == "":
             team.update_cell(count+1,2,str(ctx.guild.id))
-            team.update_cell(count+1,3,team_exp[ctx.guild.id])
+            team.update_cell(count+1,3,team_exp)
             break
         elif str(ctx.guild.id) == i.value:
             old_exp = personal.cell(count+1,3).value
-            team.update_cell(count+1,3,int(old_exp)+team_exp[ctx.guild.id])
+            team.update_cell(count+1,3,int(old_exp)+team_exp)
             break
 
 #経験値計算
 def get_exp(ctx,reg):
     counter = {}
-    team_exp = {ctx.guild.id:0}
+    team_exp = 0
     #詳細吸出し
     for i in reg:
         if len(i) >= 6:
-            team_exp[ctx.guild.id] += 1
+            team_exp += 1
         for j in i:    
             if j[:1] == "補" or j[:1] == "仮":
                 P = j[1:]
