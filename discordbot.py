@@ -691,7 +691,7 @@ async def exp(ctx,*args):
                 embed.set_author(name=Team+" status",icon_url=img)
                 embed.add_field(name="Lv",value=team.cell(count+1,4).value,inline=True)
                 embed.add_field(name="next Lv",value=team.cell(count+1,5).value,inline=True)
-                embed.add_field(name="Total EXP",value=team.cell(count+1,3) + " EXP".value,inline=True)
+                embed.add_field(name="Total EXP",value=str(team.cell(count+1,3).value) + " EXP",inline=True)
                 break
     if args[0] == "player":
         Player = ctx.author.name
