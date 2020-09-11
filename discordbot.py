@@ -691,6 +691,7 @@ async def exp(ctx,*args):
                 embed.set_author(name=Team+" status",icon_url=img)
                 embed.add_field(name="Lv",value=team.cell(count+1,4).value,inline=True)
                 embed.add_field(name="next Lv",value=team.cell(count+1,5).value,inline=True)
+                embed.add_field(name="Total EXP",value=team.cell(count+1,3) + " EXP".value,inline=True)
                 break
     if args[0] == "player":
         Player = ctx.author.name
@@ -706,14 +707,14 @@ async def exp(ctx,*args):
                 break
             elif str(ctx.author.id) == i.value:
                 embed.set_author(name=Player+"'s status",icon_url=img)
-                embed.add_field(name="Lv",value=show.cell(count+1,3).value,inline=True)
-                embed.add_field(name="next Lv",value=show.cell(count+1,4).value,inline=True)
-                embed.add_field(name="Total EXP",value=show.cell(count+1,2).value + " EXP",inline=True)
+                embed.add_field(name="Lv",value=show.cell(count+1,4).value,inline=True)
+                embed.add_field(name="next Lv",value=show.cell(count+1,5).value,inline=True)
+                embed.add_field(name="Total EXP",value=show.cell(count+1,3).value + " EXP",inline=True)
                 for j in range(0,20,2):
                     if show.cell(count+1,j+6).value == "":
                         break
                     else:
-                        embed.add_field(name=show.cell(count+1,j+5).value,value=show.cell(count+1,j+6).value + " EXP",inline=True)
+                        embed.add_field(name=show.cell(count+1,j+6).value,value=show.cell(count+1,j+7).value + " EXP",inline=True)
     if args[0] == "team" or args[0] == "player":
         await ctx.send(embed=embed)
 # -------------------------------------------------------------------------------------------------------------
