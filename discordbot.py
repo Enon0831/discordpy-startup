@@ -223,7 +223,7 @@ def exp_run_t(ctx,team_exp):
             team.update_cell(count+1,3,team_exp)
             break
         elif str(ctx.guild.id) == i.value:
-            old_exp = personal.cell(count+1,3).value
+            old_exp = team.cell(count+1,3).value
             team.update_cell(count+1,3,int(old_exp)+team_exp)
             break
 
