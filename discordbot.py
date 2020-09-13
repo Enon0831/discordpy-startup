@@ -304,9 +304,11 @@ async def on_command_error(ctx, error):
         embed.add_field(name="エラー発生コマンド", value=ctx.message.content, inline=False)
         embed.add_field(name="発生エラー", value=error, inline=False)
         m = await bot.get_channel(ch).send(embed=embed)
-        await ctx.send(f"何らかのエラーが発生しました。ごめんなさい。\nこのエラーについて問い合わせるときはこのコードも一緒にお知らせください：{m.id}\n連絡先\ntwitter:@enoooooooon\ndiscord:non#7967")
-
-
+        await ctx.send("何らかのエラーが発生しました。ごめんなさい。\n"\
+            +f"このエラーについて問い合わせるときはこのコードも一緒にお知らせください：{m.id}\n"\
+            +"***連絡先***\n"\
+            +"***Twitter*** : __@enoooooooon__\n"\
+            +"***Discord*** : __non#7967__")
 # -------------------------------------------------------------------------------------------------------------
 # コマンド関連
 # -------------------------------------------------------------------------------------------------------------
