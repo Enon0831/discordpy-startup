@@ -213,28 +213,23 @@ def exp_run_p(ctx,counter):
                 break
                     
 #経験値書込み(チーム)
-def exp_run_t(ctx,team_exp):
+def exp_run_t(ctx):
     team_id = team.range("B2:B1000")
     count = 0
     for i in team_id:
         count += 1
         if i.value == "":
             team.update_cell(count+1,2,str(ctx.guild.id))
-            team.update_cell(count+1,3,team_exp)
             break
         elif str(ctx.guild.id) == i.value:
             old_exp = team.cell(count+1,3).value
-            team.update_cell(count+1,3,int(old_exp)+team_exp)
             break
 
 #経験値計算
 def get_exp(ctx,reg):
     counter = {}
-    team_exp = 0
     #詳細吸出し
     for i in reg:
-        if len(i) >= 6:
-            team_exp += 1
         for j in i:    
             if j[:1] == "補" or j[:1] == "仮":
                 P = j[1:]
@@ -249,7 +244,7 @@ def get_exp(ctx,reg):
                 counter[name] = n
     #
     exp_run_p(ctx,counter)
-    exp_run_t(ctx,team_exp)
+    exp_run_t(ctx)
 
 @bot.event
 async def on_ready():
