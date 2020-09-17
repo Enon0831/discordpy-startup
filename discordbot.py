@@ -236,10 +236,13 @@ def get_exp(ctx,reg):
                 P = j
                 n = 2
             name = ctx.guild.get_member_named(P)
-            if name in counter:
-                counter[name] += n
+            if name == None:
+                pass
             else:
-                counter[name] = n
+                if name in counter:
+                    counter[name] += n
+                else:
+                    counter[name] = n
     #
     exp_run_p(ctx,counter)
     exp_run_t(ctx)
