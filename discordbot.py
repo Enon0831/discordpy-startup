@@ -222,6 +222,8 @@ def exp_run_t(ctx):
         if i.value == "":
             team.update_cell(count+1,2,str(ctx.guild.id))
             break
+        else:
+            break
 
 #経験値計算
 def get_exp(ctx,reg):
