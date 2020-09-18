@@ -184,34 +184,31 @@ def guild_csv(name,ID,Owner):
 #経験値書込み(個人)
 def exp_run_p(ctx,counter):
     for user in counter:
-        countR = 0
-        countC = 0
-        user_id = personal.range("B2:B1000")
-        for i in user_id:
-            countR += 1
-            #個人登録が無い場合
-            if i.value == "":
-                personal.update_cell(countR+1,1,user.name)
-                personal.update_cell(countR+1,2,str(user.id))
-                personal.update_cell(countR+1,3,str(ctx.guild.id))
-                personal.update_cell(countR+1,4,counter[user])
+        all_cell = personal.range("A2:V1000")
+        user_id = []
+        for i in range(len(all_cell) // 22):
+            user_id.append(all_cell[i * 22:(i+1)*22])
+        for row , i in enumerate(user_id,1):
+            if i[1].value == "":
+                i[0].value = user.name
+                i[1].value = str(user.id)
+                i[2].value = str(ctx.guild.id)
+                i[3].value = counter[user]
                 break
-            #個人検索
-            elif str(user.id) == i.value:
-                clan = personal.range("C" + str(countR+1) +":V" + str(countR+1))
-                for j in clan:
-                    countC += 1
-                    #clanが無い場合
+            elif str(user.id) == i[1].value:
+                for col , j in enumerate(i,1):
                     if j.value == "":
-                        personal.update_cell(countR+1,countC+2,str(ctx.guild.id))
-                        personal.update_cell(countR+1,countC+3,counter[user])
+                        j.value = str(ctx.guild.id)
+                        i[col].value = counter[user]
                         break
-                    #clan検索
                     elif str(ctx.guild.id) == j.value:
-                        old_exp = personal.cell(countR+1,countC+3).value
-                        personal.update_cell(countR+1,countC+3,int(old_exp) + counter[user])
+                        j.value = int(j.value) + counter(user)
                         break
                 break
+        write_cells = []
+        for cells in user_id:
+            write_cells.extend(cells)
+        personal.update_cells(write_cells)
                     
 #経験値書込み(チーム)
 def exp_run_t(ctx):
