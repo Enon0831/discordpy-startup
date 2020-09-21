@@ -208,7 +208,7 @@ def exp_run_p(ctx,counter):
         write_cells = []
         for cells in user_id:
             write_cells.extend(cells)
-        personal.update_cells(write_cells)
+        personal.update_cells(write_cells,value_input_option = 'USER_ENTERED' )
                     
 #経験値書込み(チーム)
 def exp_run_t(ctx):
