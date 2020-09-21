@@ -760,7 +760,6 @@ async def exp(ctx,*args):
         if len(args) == 0:
             await ctx.send("```please type 「!exp team」or「!exp player」```")
         else:
-            data = 0
             embed = discord.Embed()
             if args[0] == "team":
                 Team = ctx.guild.name
@@ -770,15 +769,15 @@ async def exp(ctx,*args):
                 for i in team_id:
                     count += 1
                     if i.value == "":
-                        if data == 0:
+                        if count == 1:
                             embed.set_author(name=Team+" status",icon_url=img)
                             embed.add_field(name="No Data",value="Not found",inline=True)
                         break
                     elif str(ctx.guild.id) == i.value:
-                        data = 1
                         embed.set_author(name=Team+" status",icon_url=img)
                         embed.add_field(name="Lv",value=team.cell(count+1,4).value,inline=True)
                         embed.add_field(name="next Lv",value=team.cell(count+1,5).value,inline=True)
+                        embed.add_field(name="Total EXP",value=str(team.cell(count+1,3).value) + " EXP",inline=True)
                         break
             if args[0] == "player":
                 Player = ctx.author.name
@@ -788,21 +787,20 @@ async def exp(ctx,*args):
                 for i in user_id:
                     count += 1
                     if i.value == "":
-                        if data == 0:
+                        if count == 1:
                             embed.set_author(name=Player+"'s status",icon_url=img)
                             embed.add_field(name="No Data",value="Not found",inline=True)
                         break
                     elif str(ctx.author.id) == i.value:
-                        data = 1
                         embed.set_author(name=Player+"'s status",icon_url=img)
                         embed.add_field(name="Lv",value=show.cell(count+1,4).value,inline=True)
                         embed.add_field(name="next Lv",value=show.cell(count+1,5).value,inline=True)
-                        embed.add_field(name="Total EXP",value=show.cell(count+1,3).value + " exp",inline=True)
-                        for j in range(0,10,2):
-                            if show.cell(count+1,j+5).value == "":
+                        embed.add_field(name="Total EXP",value=show.cell(count+1,3).value + " EXP",inline=True)
+                        for j in range(0,20,2):
+                            if show.cell(count+1,j+6).value == "":
                                 break
                             else:
-                                embed.add_field(name=show.cell(count+1,j+6).value,value=show.cell(count+1,j+7).value + " exp",inline=True)
+                                embed.add_field(name=show.cell(count+1,j+6).value,value=show.cell(count+1,j+7).value + " EXP",inline=True)
             if args[0] == "team" or args[0] == "player":
                 await ctx.send(embed=embed)
     except Exception as e:
