@@ -765,7 +765,7 @@ async def exp(ctx,*args):
             if args[0] == "team":
                 Team = ctx.guild.name
                 img = ctx.guild.icon_url
-                team_id = team.range("A2:A1000")
+                team_id = team.range("B2:B1000")
                 count = 0
                 for i in team_id:
                     count += 1
@@ -783,7 +783,7 @@ async def exp(ctx,*args):
             if args[0] == "player":
                 Player = ctx.author.name
                 img = ctx.author.avatar_url
-                user_id = personal.range("A2:A1000")
+                user_id = personal.range("B2:B1000")
                 count = 0
                 for i in user_id:
                     count += 1
