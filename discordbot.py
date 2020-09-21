@@ -662,29 +662,32 @@ async def ch(ctx,*args):
         mes = "".join(t)
         await debug(ctx,mes)
 # -------------------------------------------------------------------------------------------------------------
-
 ### stats表示
 @bot.command()
 async def stats(ctx,*args):
     try:
-        title = wks.range("B1:K1")
-        name = " ".join(args)
-        data = get_List(name)
-        if data == None:
-            embed=discord.Embed(title="Stats",description=name ,color=0xee1111)
-            embed.add_field(name="Stats Data", value="None", inline=True)
+        if len(args) == 0:
+            await ctx.send("```please type 「!stats (Player name in Lounge)」```")
         else:
-            ot = [i.value for i in title]
-            out = [i.value for i in data]
-            img,color = judge(int(out[2]))
-            embed=discord.Embed(title="Stats",description=data[1].value ,color=color)
-            embed.set_thumbnail(url=image[img])
-            for i in range(len(ot)):
-                if i != 1:
-                    embed.add_field(name=ot[i], value=out[i], inline=True)
-        msg = await ctx.send(embed=embed)
-        #await asyncio.sleep(20)
-        #await msg.delete()
+            await ctx.send("```please type 「!exp team」or「!exp player」```")
+            title = wks.range("B1:K1")
+            name = " ".join(args)
+            data = get_List(name)
+            if data == None:
+                embed=discord.Embed(title="Stats",description=name ,color=0xee1111)
+                embed.add_field(name="Stats Data", value="None", inline=True)
+            else:
+                ot = [i.value for i in title]
+                out = [i.value for i in data]
+                img,color = judge(int(out[2]))
+                embed=discord.Embed(title="Stats",description=data[1].value ,color=color)
+                embed.set_thumbnail(url=image[img])
+                for i in range(len(ot)):
+                    if i != 1:
+                        embed.add_field(name=ot[i], value=out[i], inline=True)
+            msg = await ctx.send(embed=embed)
+            #await asyncio.sleep(20)
+            #await msg.delete()
     except Exception as e:
         t = list(traceback.TracebackException.from_exception(e).format())
         mes = "".join(t)
@@ -695,13 +698,16 @@ async def stats(ctx,*args):
 @bot.command()
 async def mmr(ctx,*args):
     try:
-        names = name = " ".join(args)
-        name = names.split(",")
-        embed=discord.Embed(title="MMR",color=0x000000)
-        for i in name:
-            mmr = get_mmr(i)
-            embed.add_field(name=i,value=mmr,inline=False)
-        await ctx.send(embed=embed)
+        if len(args) == 0:
+            await ctx.send("```please type 「!stats (Player name in Lounge)」```")
+        else:
+            names = name = " ".join(args)
+            name = names.split(",")
+            embed=discord.Embed(title="MMR",color=0x000000)
+            for i in name:
+                mmr = get_mmr(i)
+                embed.add_field(name=i,value=mmr,inline=False)
+            await ctx.send(embed=embed)
     except Exception as e:
         t = list(traceback.TracebackException.from_exception(e).format())
         mes = "".join(t)
@@ -751,49 +757,54 @@ async def pick(ctx,*args):
 @bot.command()
 async def exp(ctx,*args):
     try:
-        embed = discord.Embed()
-        if args[0] == "team":
-            Team = ctx.guild.name
-            img = ctx.guild.icon_url
-            team_id = team.range("B2:B1000")
-            count = 0
-            for i in team_id:
-                count += 1
-                if i.value == "":
-                    if count == 1:
+        if len(args) == 0:
+            await ctx.send("```please type 「!exp team」or「!exp player」```")
+        else:
+            data = 0
+            embed = discord.Embed()
+            if args[0] == "team":
+                Team = ctx.guild.name
+                img = ctx.guild.icon_url
+                team_id = team.range("A2:A1000")
+                count = 0
+                for i in team_id:
+                    count += 1
+                    if i.value == "":
+                        if data == 0:
+                            embed.set_author(name=Team+" status",icon_url=img)
+                            embed.add_field(name="No Data",value="Not found",inline=True)
+                        break
+                    elif str(ctx.guild.id) == i.value:
+                        data = 1
                         embed.set_author(name=Team+" status",icon_url=img)
-                        embed.add_field(name="No Data",value="Not found",inline=True)
-                    break
-                elif str(ctx.guild.id) == i.value:
-                    embed.set_author(name=Team+" status",icon_url=img)
-                    embed.add_field(name="Lv",value=team.cell(count+1,4).value,inline=True)
-                    embed.add_field(name="next Lv",value=team.cell(count+1,5).value,inline=True)
-                    embed.add_field(name="Total EXP",value=str(team.cell(count+1,3).value) + " EXP",inline=True)
-                    break
-        if args[0] == "player":
-            Player = ctx.author.name
-            img = ctx.author.avatar_url
-            user_id = personal.range("B2:B1000")
-            count = 0
-            for i in user_id:
-                count += 1
-                if i.value == "":
-                    if count == 1:
+                        embed.add_field(name="Lv",value=team.cell(count+1,4).value,inline=True)
+                        embed.add_field(name="next Lv",value=team.cell(count+1,5).value,inline=True)
+                        break
+            if args[0] == "player":
+                Player = ctx.author.name
+                img = ctx.author.avatar_url
+                user_id = personal.range("A2:A1000")
+                count = 0
+                for i in user_id:
+                    count += 1
+                    if i.value == "":
+                        if data == 0:
+                            embed.set_author(name=Player+"'s status",icon_url=img)
+                            embed.add_field(name="No Data",value="Not found",inline=True)
+                        break
+                    elif str(ctx.author.id) == i.value:
+                        data = 1
                         embed.set_author(name=Player+"'s status",icon_url=img)
-                        embed.add_field(name="No Data",value="Not found",inline=True)
-                    break
-                elif str(ctx.author.id) == i.value:
-                    embed.set_author(name=Player+"'s status",icon_url=img)
-                    embed.add_field(name="Lv",value=show.cell(count+1,4).value,inline=True)
-                    embed.add_field(name="next Lv",value=show.cell(count+1,5).value,inline=True)
-                    embed.add_field(name="Total EXP",value=show.cell(count+1,3).value + " EXP",inline=True)
-                    for j in range(0,20,2):
-                        if show.cell(count+1,j+6).value == "":
-                            break
-                        else:
-                            embed.add_field(name=show.cell(count+1,j+6).value,value=show.cell(count+1,j+7).value + " EXP",inline=True)
-        if args[0] == "team" or args[0] == "player":
-            await ctx.send(embed=embed)
+                        embed.add_field(name="Lv",value=show.cell(count+1,3).value,inline=True)
+                        embed.add_field(name="next Lv",value=show.cell(count+1,4).value,inline=True)
+                        embed.add_field(name="Total EXP",value=show.cell(count+1,2).value + " exp",inline=True)
+                        for j in range(0,10,2):
+                            if show.cell(count+1,j+5).value == "":
+                                break
+                            else:
+                                embed.add_field(name=show.cell(count+1,j+5).value,value=show.cell(count+1,j+6).value + " exp",inline=True)
+            if args[0] == "team" or args[0] == "player":
+                await ctx.send(embed=embed)
     except Exception as e:
         t = list(traceback.TracebackException.from_exception(e).format())
         mes = "".join(t)
