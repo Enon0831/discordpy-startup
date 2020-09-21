@@ -202,7 +202,7 @@ def exp_run_p(ctx,counter):
                         i[col].value = counter[user]
                         break
                     elif str(ctx.guild.id) == j.value:
-                        j.value = int(j.value) + counter(user)
+                        j.value = int(j.value) + counter[user]
                         break
                 break
         write_cells = []
