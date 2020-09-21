@@ -669,7 +669,6 @@ async def stats(ctx,*args):
         if len(args) == 0:
             await ctx.send("```please type 「!stats (Player name in Lounge)」```")
         else:
-            await ctx.send("```please type 「!exp team」or「!exp player」```")
             title = wks.range("B1:K1")
             name = " ".join(args)
             data = get_List(name)
