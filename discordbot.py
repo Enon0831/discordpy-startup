@@ -783,7 +783,7 @@ async def exp(ctx,*args):
             if args[0] == "player":
                 Player = ctx.author.name
                 img = ctx.author.avatar_url
-                user_id = personal.range("A2:A1000")
+                user_id = personal.range("B2:B1000")
                 count = 0
                 for i in user_id:
                     count += 1
