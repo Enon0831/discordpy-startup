@@ -699,7 +699,7 @@ async def stats(ctx,*args):
 async def mmr(ctx,*args):
     try:
         if len(args) == 0:
-            await ctx.send("```please type 「!stats (Player name in Lounge)」```")
+            await ctx.send("```please type 「!mmr (Player name in Lounge)」```")
         else:
             names = name = " ".join(args)
             name = names.split(",")
