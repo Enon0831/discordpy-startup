@@ -783,7 +783,7 @@ async def exp(ctx,*args):
             if args[0] == "player":
                 Player = ctx.author.name
                 img = ctx.author.avatar_url
-                user_id = personal.range("B2:B1000")
+                user_id = personal.range("A2:A1000")
                 count = 0
                 for i in user_id:
                     count += 1
@@ -795,14 +795,14 @@ async def exp(ctx,*args):
                     elif str(ctx.author.id) == i.value:
                         data = 1
                         embed.set_author(name=Player+"'s status",icon_url=img)
-                        embed.add_field(name="Lv",value=show.cell(count+1,3).value,inline=True)
-                        embed.add_field(name="next Lv",value=show.cell(count+1,4).value,inline=True)
-                        embed.add_field(name="Total EXP",value=show.cell(count+1,2).value + " exp",inline=True)
+                        embed.add_field(name="Lv",value=show.cell(count+1,4).value,inline=True)
+                        embed.add_field(name="next Lv",value=show.cell(count+1,5).value,inline=True)
+                        embed.add_field(name="Total EXP",value=show.cell(count+1,3).value + " exp",inline=True)
                         for j in range(0,10,2):
                             if show.cell(count+1,j+5).value == "":
                                 break
                             else:
-                                embed.add_field(name=show.cell(count+1,j+5).value,value=show.cell(count+1,j+6).value + " exp",inline=True)
+                                embed.add_field(name=show.cell(count+1,j+6).value,value=show.cell(count+1,j+7).value + " exp",inline=True)
             if args[0] == "team" or args[0] == "player":
                 await ctx.send(embed=embed)
     except Exception as e:
