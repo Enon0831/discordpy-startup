@@ -683,6 +683,8 @@ async def stats(ctx,*args):
                 embed.set_thumbnail(url=image[img])
                 for i in range(len(ot)):
                     if i != 1:
+                        if out[i] == "":
+                            out[i] =0
                         embed.add_field(name=ot[i], value=out[i], inline=True)
             msg = await ctx.send(embed=embed)
             #await asyncio.sleep(20)
@@ -691,6 +693,7 @@ async def stats(ctx,*args):
         t = list(traceback.TracebackException.from_exception(e).format())
         mes = "".join(t)
         await debug(ctx,mes)
+        
 # -------------------------------------------------------------------------------------------------------------
 
 ### mmr表示
