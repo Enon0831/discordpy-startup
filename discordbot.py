@@ -58,7 +58,8 @@ image = {"iron":"https://cdn.discordapp.com/attachments/736282187770363976/74352
         "platinum":"https://cdn.discordapp.com/attachments/736282187770363976/743528185731481662/platinum2.png",
         "sapphire":"https://cdn.discordapp.com/attachments/736282187770363976/743528240232267936/sapphire_s3.png",
         "diamond":"https://cdn.discordapp.com/attachments/736282187770363976/743528221923999924/diamonds3maybe.png",
-        "master":"https://cdn.discordapp.com/attachments/736282187770363976/743528268497682452/master_s32.png"}
+        "master":"https://cdn.discordapp.com/attachments/736282187770363976/743528268497682452/master_s32.png",
+        "grandmaster":"https://cdn.discordapp.com/attachments/736282187770363976/743528287384371250/grandmaster_s3.png"}
 
 #s3からcsvファイルの取得
 def get_s3file(bucket_name, key):
