@@ -169,7 +169,7 @@ def judge(mmr):
         return "diamond",0xbee7f9
     elif 11000 <= mmr <= 12499:
         return "master",0x000000
-    elif mmr <= 12500:
+    elif mmr >= 12500:
         return "grandmaster",0x000000
 
 def guild_csv(name,ID,Owner):
