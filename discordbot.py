@@ -246,6 +246,7 @@ def get_exp(ctx,reg):
     #
     exp_run_p(ctx,counter)
     exp_run_t(ctx)
+    return counter
 
 #error
 async def debug(ctx,mes):
@@ -352,6 +353,7 @@ async def set(ctx,*args):
 @bot.command()
 async def out(ctx,*args):
     try:
+        m = ""
         for i in args:
             #　削除する時間が登録されているかどうか
             if i in guild[ctx.author.guild.id].time: 
@@ -388,7 +390,15 @@ async def clear(ctx):
         guild[ctx.author.guild.id].msg = guild[ctx.author.guild.id].msg.id
         create_csv(ctx.author.guild.id,guild[ctx.author.guild.id],ctx.author.guild.name,guild[ctx.author.guild.id].msg)
         upload(ctx.author.guild.id)
-        get_exp(ctx,reg)
+        counter = get_exp(ctx,reg)
+
+        qed = ctx.guild.name + " : " + str(ctx.guild.id) + "\n"
+        for k,v in counter.items():
+            qed += k.name + "(" + str(k.id) + ") : " + str(v) + "\n"
+
+        ch = 763217074847350805
+        await bot.get_channel(ch).send(qed)
+        
     except Exception as e:
         t = list(traceback.TracebackException.from_exception(e).format())
         mes = "".join(t)
@@ -694,7 +704,7 @@ async def stats(ctx,*args):
         t = list(traceback.TracebackException.from_exception(e).format())
         mes = "".join(t)
         await debug(ctx,mes)
-        
+
 # -------------------------------------------------------------------------------------------------------------
 
 ### mmr表示
