@@ -187,27 +187,31 @@ def exp_run_p(ctx,counter):
     for user in counter:
         all_cell = personal.range("A2:V1000")
         user_id = []
+        output = []
         for i in range(len(all_cell) // 22):
             user_id.append(all_cell[i * 22:(i+1)*22])
-        for row , i in enumerate(user_id,1):
+        for i in user_id:
             if i[1].value == "":
                 i[0].value = user.name
                 i[1].value = str(user.id)
                 i[2].value = str(ctx.guild.id)
                 i[3].value = counter[user]
+                output.append(i)
                 break
             elif str(user.id) == i[1].value:
                 for col , j in enumerate(i,1):
                     if j.value == "":
                         j.value = str(ctx.guild.id)
                         i[col].value = counter[user]
+                        output.append(i)
                         break
                     elif str(ctx.guild.id) == j.value:
                         i[col].value = int(i[col].value) + counter[user]
+                        output.append(i)
                         break
                 break
         write_cells = []
-        for cells in user_id:
+        for cells in output:
             write_cells.extend(cells)
         personal.update_cells(write_cells,value_input_option = 'USER_ENTERED' )
                     
@@ -286,10 +290,6 @@ async def on_guild_remove(guild):
     channel = bot.get_channel(CHANNEL_ID)
     await channel.send(guild.name + "から削除されました")
     guilds = bot.guilds
-    li = ""
-    for i in guilds:
-        li += i.name + " : " + str(i.owner) +"\n"
-    await channel.send(li)
     num = len(guilds)
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(num)+"servers"))
 
@@ -395,6 +395,7 @@ async def clear(ctx):
         qed = ctx.guild.name + " : " + str(ctx.guild.id) + "\n"
         for k,v in counter.items():
             qed += k.name + "(" + str(k.id) + ") : " + str(v) + "\n"
+        qed += "----------------------------------------"
 
         ch = 763217074847350805
         await bot.get_channel(ch).send(qed)
@@ -697,9 +698,7 @@ async def stats(ctx,*args):
                         if out[i] == "":
                             out[i] =0
                         embed.add_field(name=ot[i], value=out[i], inline=True)
-            msg = await ctx.send(embed=embed)
-            #await asyncio.sleep(20)
-            #await msg.delete()
+            await ctx.send(embed=embed)
     except Exception as e:
         t = list(traceback.TracebackException.from_exception(e).format())
         mes = "".join(t)
@@ -718,8 +717,9 @@ async def mmr(ctx,*args):
             name = names.split(",")
             embed=discord.Embed(title="MMR",color=0x000000)
             for i in name:
-                mmr = get_mmr(i)
-                embed.add_field(name=i,value=mmr,inline=False)
+                if i != "":
+                    mmr = get_mmr(i)
+                    embed.add_field(name=i,value=mmr,inline=False)
             await ctx.send(embed=embed)
     except Exception as e:
         t = list(traceback.TracebackException.from_exception(e).format())
