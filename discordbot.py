@@ -44,7 +44,8 @@ ragion = os.environ['REGION_NAME']
 bucket_name = "hands-up0"
 
 #discord情報欄
-bot = commands.Bot(command_prefix='!')
+intents = discord.Intents.all()
+bot = commands.Bot(command_prefix='!', intents=intents)
 bot.remove_command("help")
 token = os.environ['DISCORD_BOT_TOKEN']
 s3 = boto3.client('s3',aws_access_key_id=accesckey,aws_secret_access_key=secretkey,region_name=ragion)
