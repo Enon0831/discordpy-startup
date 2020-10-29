@@ -47,6 +47,7 @@ bucket_name = "hands-up0"
 intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix='!', intents=intents)
+bot.remove_command("help")
 token = os.environ['DISCORD_BOT_TOKEN']
 s3 = boto3.client('s3',aws_access_key_id=accesckey,aws_secret_access_key=secretkey,region_name=ragion)
 
