@@ -44,8 +44,9 @@ ragion = os.environ['REGION_NAME']
 bucket_name = "hands-up0"
 
 #discord情報欄
-bot = commands.Bot(command_prefix='!')
-bot.remove_command("help")
+intents = discord.Intents.default()
+intents.members = True
+bot = commands.Bot(command_prefix='!', intents=intents)
 token = os.environ['DISCORD_BOT_TOKEN']
 s3 = boto3.client('s3',aws_access_key_id=accesckey,aws_secret_access_key=secretkey,region_name=ragion)
 
@@ -173,6 +174,7 @@ def judge(mmr):
     elif mmr >= 12500:
         return "grandmaster",0x000000
 
+#サーバー導入書き出し
 def guild_csv(name,ID,Owner):
     with open("/tmp/" + "server list" + ".csv","w",newline="") as f:
         writer = csv.writer(f)
@@ -185,7 +187,7 @@ def guild_csv(name,ID,Owner):
 #経験値書込み(個人)
 def exp_run_p(ctx,counter):
     for user in counter:
-        all_cell = personal.range("A2:V1000")
+        all_cell = personal.range("A2:V2000")
         user_id = []
         output = []
         for i in range(len(all_cell) // 22):
@@ -674,6 +676,7 @@ async def ch(ctx,*args):
         mes = "".join(t)
         await debug(ctx,mes)
 # -------------------------------------------------------------------------------------------------------------
+
 ### stats表示
 @bot.command()
 async def stats(ctx,*args):
@@ -795,12 +798,12 @@ async def exp(ctx,*args):
             if args[0] == "player":
                 Player = ctx.author.name
                 img = ctx.author.avatar_url
-                user_id = personal.range("B2:B1000")
+                user_id = personal.range("B2:B2000")
                 count = 0
                 for i in user_id:
                     count += 1
                     if i.value == "":
-                        if count == 1:
+                        if count != 1:
                             embed.set_author(name=Player+"'s status",icon_url=img)
                             embed.add_field(name="No Data",value="Not found",inline=True)
                         break
