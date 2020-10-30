@@ -270,7 +270,8 @@ async def debug(ctx,mes):
         +f"このエラーについて問い合わせるときはこのコードも一緒にお知らせください：{m.id}\n"\
         +"***連絡先***\n"\
         +"***Twitter*** : __@enoooooooon__\n"\
-        +"***Discord*** : __non#0831__")
+        +"***Discord*** : __non#0831__\n\n"\
+        +"よく発生するエラーについては、Twitterの固定ツイートに記載してます。")
 
 @bot.event
 async def on_ready():
