@@ -746,7 +746,7 @@ async def admin(ctx,*args):
                 name.append(i.name)
                 ID.append(str(i.id))
                 Owner.append(str(i.owner))
-            guild_csv(name,ID,Owner)
+            guild_csv(ID,name,Owner)
     except Exception as e:
         t = list(traceback.TracebackException.from_exception(e).format())
         mes = "".join(t)
