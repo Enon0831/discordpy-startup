@@ -137,7 +137,7 @@ def download(id):
 
 #ラウンジデータ取得
 def get_List(name):
-    Player = wks.range("C2:C3600")
+    Player = wks.range("C2:C4651")
     count = 0
     for i in Player:
         count += 1
@@ -147,7 +147,7 @@ def get_List(name):
 
 #mmr取得
 def get_mmr(name):
-    Player = wks.range("C2:C3600")
+    Player = wks.range("C2:C4651")
     count = 0
     for i in Player:
         count += 1
