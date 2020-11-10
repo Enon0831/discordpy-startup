@@ -388,7 +388,8 @@ async def clear(ctx):
             guild[ctx.author.guild.id].clear(str(i))
             #役職リセット
             role = discord.utils.get(ctx.guild.roles, name=str(i))
-            await role.delete()
+            if role != None:
+                await role.delete()
             await ctx.guild.create_role(name=str(i),mentionable = True)
         m , embed = member.nowhands(guild[ctx.author.guild.id])
         guild[ctx.author.guild.id].msg = await ctx.send(content=m,embed=embed)
