@@ -807,7 +807,7 @@ async def exp(ctx,*args):
                 for i in user_id:
                     count += 1
                     if i.value == "":
-                        if count != 1:
+                        if count == 1:
                             embed.set_author(name=Player+"'s status",icon_url=img)
                             embed.add_field(name="No Data",value="Not found",inline=True)
                         break
