@@ -265,15 +265,17 @@ def EandL(Move,ID,name,owner):
     for i in range(len(mov)//4):
         w.append(mov[i * 4:(i+1)*4])
     for i in w:
-        print(i)
         if i[0].value == "":
-            i[0] = Move
-            i[1] = ID
-            i[2] = name
-            i[3] = owner
+            i[0].value = Move
+            i[1].value = str(ID)
+            i[2].value = name
+            i[3].value = owner.name
             output.append(i)
             break
-    Enter.update_cells(output,value_input_option = 'USER_ENTERED' )
+    out = []
+    for i in output:
+        out.extend(i)
+    Enter.update_cells(out,value_input_option = 'USER_ENTERED' )
 
 
 #error
