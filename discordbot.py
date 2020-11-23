@@ -252,8 +252,8 @@ def get_exp(ctx,reg):
                 else:
                     counter[name] = n
     #
-    exp_run_p(ctx,counter)
-    exp_run_t(ctx)
+    th1 = threading.Thread(target=exp_run_p,args=(ctx,counter,))
+    th1.start()
     return counter
 
 #入退室書込み
