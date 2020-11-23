@@ -302,7 +302,7 @@ async def on_ready():
 async def on_guild_join(guild):
     CHANNEL_ID = 744741657769148457
     channel = bot.get_channel(CHANNEL_ID)
-    await channel.send(guild.name + "に導入されました\n" + "代表者は" + str(guild.owner) + "です。\nID"+str(guild.id))
+    await channel.send(guild.name + "に導入されました\n" + "代表者は" + str(guild.owner) + "です。\nID : "+str(guild.id))
     guilds = bot.guilds
     num = len(guilds)
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(num)+"servers"))
@@ -312,7 +312,7 @@ async def on_guild_join(guild):
 async def on_guild_remove(guild):
     CHANNEL_ID = 744741657769148457
     channel = bot.get_channel(CHANNEL_ID)
-    await channel.send(guild.name + "から削除されました\nID:"+str(guild.id))
+    await channel.send(guild.name + "から削除されました\nID : "+str(guild.id))
     guilds = bot.guilds
     num = len(guilds)
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(num)+"servers"))
