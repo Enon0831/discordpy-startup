@@ -13,7 +13,6 @@ from oauth2client.service_account import ServiceAccountCredentials
 import asyncio
 import random
 import traceback
-import threading
 
 ######################################################################################################################
 #スプレッドシート情報欄
@@ -34,6 +33,7 @@ EXP = gc.open_by_key(SPSHEET_KEY)
 personal = EXP.worksheet("個人経験値")
 team = EXP.worksheet("チーム経験値")
 show = EXP.worksheet("personal_data")
+Enter = EXP.worksheet("入退室")
 # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - 
 ######################################################################################################################
 
@@ -137,7 +137,7 @@ def download(id):
 
 #ラウンジデータ取得
 def get_List(name):
-    Player = wks.range("C2:C4651")
+    Player = wks.range("C2:C")
     count = 0
     for i in Player:
         count += 1
@@ -147,7 +147,7 @@ def get_List(name):
 
 #mmr取得
 def get_mmr(name):
-    Player = wks.range("C2:C4651")
+    Player = wks.range("C2:C")
     count = 0
     for i in Player:
         count += 1
@@ -252,9 +252,27 @@ def get_exp(ctx,reg):
                 else:
                     counter[name] = n
     #
-    th1 = threading.Thread(target=exp_run_p,args=(ctx,counter,))
-    th1.start()
+    exp_run_p(ctx,counter)
+    exp_run_t(ctx)
     return counter
+
+#入退室書込み
+def EandL(Move,ID,name,owner):
+    mov = EXP.range("A2:D1000")
+    write_list = []
+    output = []
+    for i in range(len(mov)//4):
+        write_list.appned(mov[i * 4:(i+1)*4])
+    for i in write_list:
+        if i[0].value == "":
+            i[0] = Move
+            i[1] = ID
+            i[2] = name
+            i[3] = owner
+            output.append(i)
+            break
+    personal.update_cells(output,value_input_option = 'USER_ENTERED' )
+
 
 #error
 async def debug(ctx,mes):
@@ -272,7 +290,7 @@ async def debug(ctx,mes):
         +"***連絡先***\n"\
         +"***Twitter*** : __@enoooooooon__\n"\
         +"***Discord*** : __non#0831__\n\n"\
-        +"よく発生するエラーについては、Twitterの固定ツイートに記載してます。")
+        +"よく発生するエラーについては、twitterの固定ツイートに記載してます。")
 
 @bot.event
 async def on_ready():
@@ -284,19 +302,21 @@ async def on_ready():
 async def on_guild_join(guild):
     CHANNEL_ID = 744741657769148457
     channel = bot.get_channel(CHANNEL_ID)
-    await channel.send(guild.name + "に導入されました\n" + "代表者は" + str(guild.owner) + "です。")
+    await channel.send(guild.name + "に導入されました\n" + "代表者は" + str(guild.owner) + "です。\nID"+str(guild.id))
     guilds = bot.guilds
     num = len(guilds)
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(num)+"servers"))
+    EandL("IN",guild.id,guild.name,guild.owner)
 
 @bot.event
 async def on_guild_remove(guild):
     CHANNEL_ID = 744741657769148457
     channel = bot.get_channel(CHANNEL_ID)
-    await channel.send(guild.name + "から削除されました")
+    await channel.send(guild.name + "から削除されました\nID:"+str(guild.id))
     guilds = bot.guilds
     num = len(guilds)
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(num)+"servers"))
+    EandL("OUT",guild.id,guild.name,guild.owner)
 
 @bot.event
 async def on_message(message):
@@ -710,7 +730,6 @@ async def stats(ctx,*args):
         t = list(traceback.TracebackException.from_exception(e).format())
         mes = "".join(t)
         await debug(ctx,mes)
-
 # -------------------------------------------------------------------------------------------------------------
 
 ### mmr表示
