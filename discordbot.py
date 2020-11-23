@@ -259,11 +259,11 @@ def get_exp(ctx,reg):
 #入退室書込み
 def EandL(Move,ID,name,owner):
     mov = Enter.range("A2:D1000")
-    write_list = []
+    w = []
     output = []
     for i in range(len(mov)//4):
-        write_list.appned(mov[i * 4:(i+1)*4])
-    for i in write_list:
+        w.append(mov[i * 4:(i+1)*4])
+    for i in w:
         if i[0].value == "":
             i[0] = Move
             i[1] = ID
