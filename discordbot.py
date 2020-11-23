@@ -258,7 +258,7 @@ def get_exp(ctx,reg):
 
 #入退室書込み
 def EandL(Move,ID,name,owner):
-    mov = EXP.range("A2:D1000")
+    mov = Enter.range("A2:D1000")
     write_list = []
     output = []
     for i in range(len(mov)//4):
