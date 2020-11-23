@@ -13,6 +13,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import asyncio
 import random
 import traceback
+import threading
 
 ######################################################################################################################
 #スプレッドシート情報欄
@@ -264,6 +265,7 @@ def EandL(Move,ID,name,owner):
     for i in range(len(mov)//4):
         w.append(mov[i * 4:(i+1)*4])
     for i in w:
+        print(i)
         if i[0].value == "":
             i[0] = Move
             i[1] = ID
@@ -271,7 +273,7 @@ def EandL(Move,ID,name,owner):
             i[3] = owner
             output.append(i)
             break
-    personal.update_cells(output,value_input_option = 'USER_ENTERED' )
+    Enter.update_cells(output,value_input_option = 'USER_ENTERED' )
 
 
 #error
