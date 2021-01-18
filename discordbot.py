@@ -190,11 +190,11 @@ def guild_csv(name,ID,Owner):
 #経験値書込み(個人)
 def exp_run_p(ctx,counter):
     for user in counter:
-        all_cell = personal.range("A2:V2000")
+        all_cell = personal.range("A2:AH2000")
         user_id = []
         output = []
-        for i in range(len(all_cell) // 22):
-            user_id.append(all_cell[i * 22:(i+1)*22])
+        for i in range(len(all_cell) // 34):
+            user_id.append(all_cell[i * 34:(i+1)*34])
         for i in user_id:
             if i[1].value == "":
                 i[0].value = user.name
