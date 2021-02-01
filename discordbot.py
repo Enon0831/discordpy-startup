@@ -138,7 +138,7 @@ def download(id):
 
 #ラウンジデータ取得
 def get_List(name):
-    Player = wks.range("C2:C4561")
+    Player = wks.range("C2:C5501")
     count = 0
     for i in Player:
         count += 1
@@ -148,7 +148,7 @@ def get_List(name):
 
 #mmr取得
 def get_mmr(name):
-    Player = wks.range("C2:C4561")
+    Player = wks.range("C2:C5501")
     count = 0
     for i in Player:
         count += 1
@@ -158,21 +158,21 @@ def get_mmr(name):
 
 #ランク判定
 def judge(mmr):
-    if mmr <=1999:
+    if mmr <=3999:
         return "iron",0x6c6a6a
-    elif 2000 <= mmr <= 3499:
+    elif 4000 <= mmr <= 5499:
         return "bronze",0xe17319
-    elif 3500 <= mmr <= 4999:
+    elif 5500 <= mmr <= 6999:
         return "silver",0xd1e1dc
-    elif 5000 <= mmr <= 6499:
+    elif 7000 <= mmr <= 8499:
         return "gold",0xdee114
-    elif 6500 <= mmr <= 7999:
+    elif 8500 <= mmr <= 9999:
         return "platinum",0x2bd7ee
-    elif 8000 <= mmr <= 9499:
+    elif 10000 <= mmr <= 11499:
         return "sapphire",0x2b5bee
-    elif 9500 <= mmr <= 10999:
+    elif 11500 <= mmr <= 12999:
         return "diamond",0xbee7f9
-    elif 11000 <= mmr <= 12499:
+    elif 13000 <= mmr <= 14499:
         return "master",0x000000
     elif mmr >= 12500:
         return "grandmaster",0x000000
@@ -190,7 +190,7 @@ def guild_csv(name,ID,Owner):
 #経験値書込み(個人)
 def exp_run_p(ctx,counter):
     for user in counter:
-        all_cell = personal.range("A2:AH2000")
+        all_cell = personal.range("A2:AH3000")
         user_id = []
         output = []
         for i in range(len(all_cell) // 34):
@@ -825,7 +825,7 @@ async def exp(ctx,*args):
             if args[0] == "player":
                 Player = ctx.author.name
                 img = ctx.author.avatar_url
-                user_id = personal.range("B2:B2000")
+                user_id = personal.range("B2:B3000")
                 count = 0
                 for i in user_id:
                     count += 1
